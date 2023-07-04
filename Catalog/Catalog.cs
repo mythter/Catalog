@@ -39,7 +39,7 @@
                 throw new ArgumentNullException(nameof(section));
             }
 
-            if (RootItems.Contains(section, new SectionComparer()))
+            if (RootItems.Exists(s => s.Name == section.Name))
             {
                 throw new ArgumentException("Subsection with such name has already exist in the current section.", nameof(section));
             }
@@ -59,10 +59,7 @@
                 throw new ArgumentNullException(nameof(section));
             }
 
-            if (RootItems.Contains(section))
-            {
-                RootItems.Remove(section);
-            }
+            RootItems.Remove(section);
         }
 
         /// <summary>
@@ -77,13 +74,11 @@
                 throw new ArgumentNullException(nameof(sectionName));
             }
 
-            foreach (var section in RootItems)
+            var sectionToRemove = RootItems.Find(x => x.Name == sectionName);
+
+            if (sectionToRemove is not null)
             {
-                if (section.Name == sectionName)
-                {
-                    RootItems.Remove(section);
-                    break;
-                }
+                RootItems.Remove(sectionToRemove);
             }
         }
 

@@ -1,12 +1,15 @@
-﻿namespace BookCatalog
+﻿using BookCatalog.TreeViewHelper;
+using System.Xml.Linq;
+
+namespace BookCatalog
 {
     public abstract class Section
     {
         #region Properties
 
-        public List<Section>? ChildSections { get; set; }
+        public List<Section> ChildSections { get; set; }
         public Section? ParentSection { get; set; }
-        public List<Element>? Elements { get; set; }
+        public List<Element> Elements { get; set; }
         public string Name { get; set; }
 
         #endregion
@@ -19,6 +22,9 @@
             {
                 throw new ArgumentException("Argument must not be null or empty", nameof(name));
             }
+
+            ChildSections = new List<Section>();
+            Elements = new List<Element>();
 
             Name = name;
         }
@@ -40,12 +46,7 @@
                 throw new ArgumentNullException(nameof(section));
             }
 
-            if (ChildSections is null)
-            {
-                ChildSections = new List<Section>() { };
-            }
-
-            if (ChildSections.Contains(section, new SectionComparer()))
+            if (ChildSections.Exists(s => s.Name == section.Name))
             {
                 throw new ArgumentException("Subsection with the same name has already exist in the current section.", nameof(section));
             }
@@ -67,15 +68,7 @@
                 throw new ArgumentNullException(nameof(section));
             }
 
-            if (ChildSections is null)
-            {
-                ChildSections = new List<Section>() { };
-            }
-
-            if (ChildSections.Contains(section))
-            {
-                ChildSections.Remove(section);
-            }
+            ChildSections.Remove(section);
         }
 
         /// <summary>
@@ -90,18 +83,11 @@
                 throw new ArgumentNullException(nameof(sectionName));
             }
 
-            if (ChildSections is null)
-            {
-                ChildSections = new List<Section>() { };
-            }
+            var sectionToRemove = ChildSections.Find(x => x.Name == sectionName);
 
-            foreach (var section in ChildSections)
+            if (sectionToRemove is not null)
             {
-                if (section.Name == sectionName)
-                {
-                    ChildSections.Remove(section);
-                    break;
-                }
+                ChildSections.Remove(sectionToRemove);
             }
         }
 
@@ -118,12 +104,7 @@
                 throw new ArgumentNullException(nameof(element));
             }
 
-            if (Elements is null)
-            {
-                Elements = new List<Element>() { };
-            }
-
-            if (Elements.Contains(element, new ElementComparer()))
+            if (Elements.Exists(e => e.Name == element.Name))
             {
                 throw new ArgumentException("Element with the same name has already exist in the current section.", nameof(element));
             }
@@ -145,15 +126,8 @@
                 throw new ArgumentNullException(nameof(element));
             }
 
-            if (Elements is null)
-            {
-                Elements = new List<Element>() { };
-            }
+            Elements.Remove(element);
 
-            if (Elements.Contains(element))
-            {
-                Elements.Remove(element);
-            }
         }
 
         /// <summary>
@@ -168,18 +142,11 @@
                 throw new ArgumentNullException(nameof(elementName));
             }
 
-            if (Elements is null)
-            {
-                Elements = new List<Element>() { };
-            }
+            var elementToRemove = ChildSections.Find(x => x.Name == elementName);
 
-            foreach (var element in Elements)
+            if (elementToRemove is not null)
             {
-                if (element.Name == elementName)
-                {
-                    Elements.Remove(element);
-                    break;
-                }
+                ChildSections.Remove(elementToRemove);
             }
         }
 
