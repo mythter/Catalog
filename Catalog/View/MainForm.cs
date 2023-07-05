@@ -30,6 +30,7 @@ namespace BookCatalog
         public event TreeNodeMouseHoverEventHandler TreeNodeMouseHover;
         public event TreeNodeMouseClickEventHandler OpenFile;
         public event FormClosingEventHandler CloseEvent;
+        public event DataGridViewCellEventHandler ChangeAttributeValue;
 
         private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
         {
@@ -63,6 +64,11 @@ namespace BookCatalog
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             CloseEvent?.Invoke(sender, e);
+        }
+
+        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            ChangeAttributeValue?.Invoke(sender, e);
         }
     }
 }

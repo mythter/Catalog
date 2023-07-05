@@ -19,5 +19,7 @@
         event TreeNodeMouseClickEventHandler OpenFile;
 
         event FormClosingEventHandler CloseEvent;
+
+        event DataGridViewCellEventHandler ChangeAttributeValue;
     }
 }

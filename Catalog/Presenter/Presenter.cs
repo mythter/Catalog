@@ -1,5 +1,6 @@
 ﻿using BookCatalog.TreeViewHelper;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace BookCatalog
 {
@@ -14,6 +15,8 @@ namespace BookCatalog
         {
             this.form = form;
 
+            form.PdfViewer.CanPrint = false;
+
             form.TreeViewItemDrag += TreeViewItemDrag;
             form.TreeViewDragEnter += TreeViewDragEnter;
             form.TreeViewDragDrop += TreeViewDragDrop;
@@ -22,6 +25,7 @@ namespace BookCatalog
             form.ShowAttributes += ShowAttributes;
             form.OpenFile += OpenFile;
             form.CloseEvent += Close;
+            form.ChangeAttributeValue += ChangeAttributeValue;
 
             string json = File.ReadAllText("catalog.json");
             catalog = JsonConvert.DeserializeObject<BookCatalog>(json, new JsonSerializerSettings
@@ -96,6 +100,7 @@ namespace BookCatalog
         private void ShowAttributes(object sender, TreeNodeMouseClickEventArgs e)
         {
             _selectedNode = e.Node;
+
             if (_selectedNode is SectionNode sectionNode)
             {
                 var section = sectionNode.Section;
@@ -160,6 +165,48 @@ namespace BookCatalog
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
                     serializer.Serialize(writer, catalog, typeof(BookCatalog));
+                }
+            }
+        }
+
+        private void ChangeAttributeValue(object sender, DataGridViewCellEventArgs e)
+        {
+            if (_selectedNode is SectionNode sectionNode)
+            {
+                var eBookSection = (EBookSection)sectionNode.Section;
+                switch (form.AttributesDataGrid.Rows[e.RowIndex].Cells[0].Value)
+                {
+                    case "Theme":
+                        eBookSection.Theme = (string)form.AttributesDataGrid[e.ColumnIndex, e.RowIndex].Value;
+                        break;
+                }
+            }
+
+            if (_selectedNode is ElementNode elementNode)
+            {
+                var eBook = (EBook)elementNode.Element;
+                string value = (string)form.AttributesDataGrid[e.ColumnIndex, e.RowIndex].Value;
+                switch (form.AttributesDataGrid.Rows[e.RowIndex].Cells[0].Value)
+                {
+                    case "Title":
+                        eBook.Title = value;
+                        break;
+
+                    case "Author":
+                        eBook.Author = value;
+                        break;
+
+                    case "Year":
+                        int temp;
+                        if (int.TryParse(value, CultureInfo.InvariantCulture, out temp))
+                        {
+                            eBook.Year = temp;
+                        }
+                        break;
+
+                    case "Path":
+                        eBook.Path = value;
+                        break;
                 }
             }
         }

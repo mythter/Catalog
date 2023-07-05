@@ -131,6 +131,7 @@
             dataGridView.RowTemplate.Height = 29;
             dataGridView.Size = new Size(360, 187);
             dataGridView.TabIndex = 0;
+            dataGridView.CellEndEdit += dataGridView_CellEndEdit;
             // 
             // pdfViewer
             // 
