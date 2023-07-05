@@ -74,9 +74,19 @@ namespace BookCatalog
             ChangeAttributeValue?.Invoke(sender, e);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AddSection_Click(object sender, EventArgs e)
         {
+            AddSection?.Invoke(sender, e);
+        }     
 
+        private void AddElementBtn_Click(object sender, EventArgs e)
+        {
+            AddElement?.Invoke(sender, e);
+        }
+      
+        private void Remove_Click(object sender, EventArgs e)
+        {
+            Remove?.Invoke(sender, e);
         }
     }
 }

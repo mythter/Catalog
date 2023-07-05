@@ -105,10 +105,12 @@
 
             foreach (var s in RootItems)
             {
-                if (s.RemoveElement(element))
+                if (s.Elements.Remove(element))
                 {
                     return true;
                 }
+                s.RemoveElement(element);
+
             }
 
             return false;

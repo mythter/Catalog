@@ -30,9 +30,9 @@
         {
             treeView = new TreeView();
             catalogGroup = new GroupBox();
-            button3 = new Button();
-            button2 = new Button();
-            button1 = new Button();
+            RemoveBtn = new Button();
+            AddElementBtn = new Button();
+            AddSectionBtn = new Button();
             searchTextBox = new TextBox();
             attributesGroup = new GroupBox();
             dataGridView = new DataGridView();
@@ -58,9 +58,9 @@
             // 
             // catalogGroup
             // 
-            catalogGroup.Controls.Add(button3);
-            catalogGroup.Controls.Add(button2);
-            catalogGroup.Controls.Add(button1);
+            catalogGroup.Controls.Add(RemoveBtn);
+            catalogGroup.Controls.Add(AddElementBtn);
+            catalogGroup.Controls.Add(AddSectionBtn);
             catalogGroup.Controls.Add(searchTextBox);
             catalogGroup.Controls.Add(treeView);
             catalogGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
@@ -71,36 +71,38 @@
             catalogGroup.TabStop = false;
             catalogGroup.Text = "Catalog";
             // 
-            // button3
+            // RemoveBtn
             // 
-            button3.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(257, 364);
-            button3.Name = "button3";
-            button3.Size = new Size(110, 30);
-            button3.TabIndex = 4;
-            button3.Text = "Remove";
-            button3.UseVisualStyleBackColor = true;
+            RemoveBtn.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            RemoveBtn.Location = new Point(257, 364);
+            RemoveBtn.Name = "RemoveBtn";
+            RemoveBtn.Size = new Size(110, 30);
+            RemoveBtn.TabIndex = 4;
+            RemoveBtn.Text = "Remove";
+            RemoveBtn.UseVisualStyleBackColor = true;
+            RemoveBtn.Click += Remove_Click;
             // 
-            // button2
+            // AddElementBtn
             // 
-            button2.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(122, 364);
-            button2.Name = "button2";
-            button2.Size = new Size(129, 30);
-            button2.TabIndex = 3;
-            button2.Text = "Add element";
-            button2.UseVisualStyleBackColor = true;
+            AddElementBtn.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            AddElementBtn.Location = new Point(122, 364);
+            AddElementBtn.Name = "AddElementBtn";
+            AddElementBtn.Size = new Size(129, 30);
+            AddElementBtn.TabIndex = 3;
+            AddElementBtn.Text = "Add element";
+            AddElementBtn.UseVisualStyleBackColor = true;
+            AddElementBtn.Click += AddElementBtn_Click;
             // 
-            // button1
+            // AddSectionBtn
             // 
-            button1.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(6, 364);
-            button1.Name = "button1";
-            button1.Size = new Size(110, 30);
-            button1.TabIndex = 2;
-            button1.Text = "Add section";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            AddSectionBtn.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            AddSectionBtn.Location = new Point(6, 364);
+            AddSectionBtn.Name = "AddSectionBtn";
+            AddSectionBtn.Size = new Size(110, 30);
+            AddSectionBtn.TabIndex = 2;
+            AddSectionBtn.Text = "Add section";
+            AddSectionBtn.UseVisualStyleBackColor = true;
+            AddSectionBtn.Click += AddSection_Click;
             // 
             // searchTextBox
             // 
@@ -177,8 +179,8 @@
         private DataGridView dataGridView;
         private Spire.PdfViewer.Forms.PdfViewer pdfViewer;
         private TextBox searchTextBox;
-        private Button button1;
-        private Button button3;
-        private Button button2;
+        private Button AddSectionBtn;
+        private Button RemoveBtn;
+        private Button AddElementBtn;
     }
 }

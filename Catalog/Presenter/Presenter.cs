@@ -29,6 +29,10 @@ namespace BookCatalog
             form.CloseEvent += Close;
             form.ChangeAttributeValue += ChangeAttributeValue;
 
+            form.Remove += Remove;
+            form.AddSection += AddSection;
+            form.AddElement += AddElement;
+
             string json = File.ReadAllText("catalog.json");
             catalog = JsonConvert.DeserializeObject<BookCatalog>(json, new JsonSerializerSettings
             {
@@ -74,7 +78,7 @@ namespace BookCatalog
                     }
                     else if (sourceNode is ElementNode el)
                     {
-                        catalog.RootItems.ForEach(s => s.RemoveElement(el.Element));
+                        catalog.RemoveElementFromRootItems(el.Element);
                         sectionDestinationNode.Section.AddElement(el.Element);
                     }
 
@@ -228,6 +232,33 @@ namespace BookCatalog
                         eBook.Path = value;
                         break;
                 }
+            }
+        }
+
+        private void AddSection(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void AddElement(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Remove(object sender, EventArgs e)
+        {
+            if (_selectedNode is SectionNode sectionNode)
+            {
+                form.CatalogTree.Nodes.Remove(sectionNode);
+                catalog.Remove(sectionNode.Section);
+                form.AttributesDataGrid.Columns.Clear();
+            }
+
+            if (_selectedNode is ElementNode elementNode)
+            {
+                form.CatalogTree.Nodes.Remove(elementNode);
+                catalog.RemoveElementFromRootItems(elementNode.Element);
+                form.AttributesDataGrid.Columns.Clear();
             }
         }
     }
