@@ -129,7 +129,7 @@
             dataGridView.RowHeadersVisible = false;
             dataGridView.RowHeadersWidth = 51;
             dataGridView.RowTemplate.Height = 29;
-            dataGridView.Size = new Size(360, 248);
+            dataGridView.Size = new Size(360, 187);
             dataGridView.TabIndex = 0;
             // 
             // pdfViewer

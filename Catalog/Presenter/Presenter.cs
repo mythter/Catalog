@@ -106,6 +106,7 @@ namespace BookCatalog
                     form.AttributesDataGrid.ColumnCount = 2;
                     form.AttributesDataGrid.Columns[0].Width =
                     form.AttributesDataGrid.Columns[1].Width = 178;
+                    form.AttributesDataGrid.Columns[0].DefaultCellStyle.Font = new Font(form.AttributesDataGrid.Font, FontStyle.Bold);
 
                     form.AttributesDataGrid.Rows.Add("Theme", ebookSection.Theme ?? "");
                 }
@@ -121,6 +122,7 @@ namespace BookCatalog
                     form.AttributesDataGrid.ColumnCount = 2;
                     form.AttributesDataGrid.Columns[0].Width =
                     form.AttributesDataGrid.Columns[1].Width = 178;
+                    form.AttributesDataGrid.Columns[0].DefaultCellStyle.Font = new Font(form.AttributesDataGrid.Font, FontStyle.Bold);
 
                     form.AttributesDataGrid.Rows.Add("Title", eBook.Title ?? "");
                     form.AttributesDataGrid.Rows.Add("Author", eBook.Author ?? "");
