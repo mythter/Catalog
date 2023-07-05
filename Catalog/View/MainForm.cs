@@ -2,16 +2,37 @@ using BookCatalog.TreeViewHelper;
 
 namespace BookCatalog
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IView
     {
+        Presenter presenter;
         public MainForm()
         {
             InitializeComponent();
+            presenter = new Presenter(this);
         }
+
+        // Implementing IView interface properties
+        public string SearchTextBox { get => searchTextBox.Text; set => searchTextBox.Text = value; }
+
+#pragma warning disable S2292 // Trivial properties should be auto-implemented
+
+        public TreeView CatalogTree { get => treeView; set => treeView = value; }
+        public DataGridView AttributesDataGrid { get => dataGridView; set => dataGridView = value; }
+        public Spire.PdfViewer.Forms.PdfViewer PdfViewer { get => pdfViewer; set => pdfViewer = value; }
+
+#pragma warning restore S2292 // Trivial properties should be auto-implemented
+
+        // Implementing IView interface events
+        public event ItemDragEventHandler TreeViewItemDrag;
+        public event DragEventHandler TreeViewDragDrop;
+        public event DragEventHandler TreeViewDragEnter;
+        public event TreeNodeMouseClickEventHandler ShowAttributes;
+        public event TreeNodeMouseHoverEventHandler TreeNodeMouseHover;
+        public event TreeNodeMouseClickEventHandler OpenFile;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Catalog catalog = new Catalog();
+            BookCatalog catalog = new BookCatalog();
 
             catalog.Add(new EBookSection("Section 1"));
             catalog.Add(new EBookSection("Section 2"));
@@ -19,7 +40,7 @@ namespace BookCatalog
 
             catalog.RootItems[0].AddSection(new EBookSection("Section 4"));
             catalog.RootItems[0].AddSection(new EBookSection("Section 5"));
-            var book = new EBook("Good book", "Good author");
+            var book = new EBook("Good book", "Good author", path : @"D:\Универ\Операционные системы\crictecs2023-1 certificate.pdf");
             catalog.RootItems[0].ChildSections![0].AddElement(book);
             catalog.RootItems[0].ChildSections![0].AddElement(new EBook($"Book 14"));
             catalog.RootItems[0].ChildSections![0].AddSection(new EBookSection($"Section 6"));
@@ -29,38 +50,35 @@ namespace BookCatalog
             catalog.RootItems[0].ChildSections![0].ChildSections![0].AddElement(new EBook($"Book 563"));
 
             catalog.RootItems.ForEach(r => treeView.Nodes.Add(new SectionNode(r)));
-
-            this.treeView.ItemDrag += new ItemDragEventHandler(treeView_ItemDrag);
-            this.treeView.DragDrop += new DragEventHandler(treeView_DragDrop);
-            this.treeView.DragEnter += new DragEventHandler(treeView_DragEnter);
         }
-
-        private TreeNode _selectedNode;
 
         private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
         {
             DoDragDrop(e.Item, DragDropEffects.Move);
-            _selectedNode = (TreeNode)e.Item;
+            //TreeViewItemDrag?.Invoke(sender, e);
         }
         private void treeView_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Move;
+            TreeViewDragEnter?.Invoke(sender, e);
         }
         private void treeView_DragDrop(object sender, DragEventArgs e)
         {
-            TreeNode sourceNode = _selectedNode;
-            if (sourceNode != null /*&& e.Data.GetDataPresent("System.Windows.Forms.TreeNode", false)*/)
-            {
-                Point pt = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
-                TreeNode destinationNode = ((TreeView)sender).GetNodeAt(pt);
-                if (destinationNode != null)
-                {
-                    //ur target
-                    ((TreeView)sender).Nodes.Remove(sourceNode);
+            TreeViewDragDrop.Invoke(sender, e);
+        }
 
-                    destinationNode.Nodes.Add(sourceNode);
-                }
-            }
+        private void treeView_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
+        {
+            TreeNodeMouseHover?.Invoke(sender, e);
+        }
+
+        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            ShowAttributes?.Invoke(sender, e);
+        }
+
+        private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            OpenFile?.Invoke(sender, e);
         }
     }
 }

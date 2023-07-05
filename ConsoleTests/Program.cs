@@ -6,7 +6,7 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            Catalog catalog = new Catalog();
+            BookCatalog.BookCatalog catalog = new BookCatalog.BookCatalog();
 
             catalog.Add(new EBookSection("Section 1"));
             catalog.Add(new EBookSection("Section 2"));
