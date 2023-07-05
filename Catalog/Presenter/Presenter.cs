@@ -23,6 +23,7 @@ namespace BookCatalog
             form.TreeViewDragEnter += TreeViewDragEnter;
             form.TreeViewDragDrop += TreeViewDragDrop;
             form.TreeNodeMouseHover += TreeNodeMouseHover;
+            form.TreeNodeNameEdited += TreeNodeNameEdited;
 
             form.ShowAttributes += ShowAttributes;
             form.OpenFile += OpenFile;
@@ -63,13 +64,24 @@ namespace BookCatalog
                 Point pt = form.CatalogTree.PointToClient(new Point(e.X, e.Y));
                 TreeNode destinationNode = form.CatalogTree.GetNodeAt(pt);
 
+                if(destinationNode == sourceNode.Parent || destinationNode == sourceNode) 
+                {
+                    return;
+                }
 
                 if (destinationNode is SectionNode sectionDestinationNode)
                 {
+                    if ((sourceNode is SectionNode sNode
+                        && sectionDestinationNode.Section.ChildSections.Exists(s => s.Name == sNode.Section.Name))
+                        || (sourceNode is ElementNode eNode
+                        && sectionDestinationNode.Section.Elements.Exists(s => s.Name == eNode.Element.Name)))
+                    {
+                        MessageBox.Show("Section or element with such name already exists in the current section.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     form.CatalogTree.Nodes.Remove(sourceNode);
                     destinationNode.Nodes.Add(sourceNode);
-
-                    Section? parentSection;
 
                     if (sourceNode is SectionNode s)
                     {
@@ -87,6 +99,12 @@ namespace BookCatalog
 
                 if (sourceNode is SectionNode sectionNode && destinationNode is null)
                 {
+                    if (sourceNode is SectionNode sNode && catalog.RootItems.Exists(s => s.Name == sNode.Name))
+                    {
+                        MessageBox.Show("Section with such name already exists in the current section.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     form.CatalogTree.Nodes.Remove(sectionNode);
                     form.CatalogTree.Nodes.Add(sectionNode);
 
@@ -115,6 +133,7 @@ namespace BookCatalog
                 {
                     form.AttributesDataGrid.Columns.Clear();
                     form.AttributesDataGrid.ColumnCount = 2;
+                    form.AttributesDataGrid.Columns[0].ReadOnly = true;
                     form.AttributesDataGrid.Columns[0].Width =
                     form.AttributesDataGrid.Columns[1].Width = 178;
                     form.AttributesDataGrid.Columns[0].DefaultCellStyle.Font = new Font(form.AttributesDataGrid.Font, FontStyle.Bold);
@@ -131,6 +150,7 @@ namespace BookCatalog
                 {
                     form.AttributesDataGrid.Columns.Clear();
                     form.AttributesDataGrid.ColumnCount = 2;
+                    form.AttributesDataGrid.Columns[0].ReadOnly = true;
                     form.AttributesDataGrid.Columns[0].Width =
                     form.AttributesDataGrid.Columns[1].Width = 178;
                     form.AttributesDataGrid.Columns[0].DefaultCellStyle.Font = new Font(form.AttributesDataGrid.Font, FontStyle.Bold);
@@ -167,7 +187,7 @@ namespace BookCatalog
                         };
                         Process.Start(pi);
                     }
-                    catch (Exception )
+                    catch (Exception)
                     {
                         MessageBox.Show("An error occurred while opening the file.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
@@ -237,7 +257,15 @@ namespace BookCatalog
 
         private void AddSection(object sender, EventArgs e)
         {
-            
+            if (_selectedNode is SectionNode sectionNode)
+            {
+
+            }
+
+            if (_selectedNode is ElementNode elementNode)
+            {
+
+            }
         }
 
         private void AddElement(object sender, EventArgs e)
@@ -259,6 +287,41 @@ namespace BookCatalog
                 form.CatalogTree.Nodes.Remove(elementNode);
                 catalog.RemoveElementFromRootItems(elementNode.Element);
                 form.AttributesDataGrid.Columns.Clear();
+            }
+        }
+
+        private void TreeNodeNameEdited(object sender, NodeLabelEditEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Label))
+            {
+                if (_selectedNode is SectionNode sectionNode)
+                {
+                    if ((sectionNode.Section.ParentSection is not null
+                        && !sectionNode.Section.ParentSection.ChildSections.Exists(s => s.Name == e.Label))
+                        || (sectionNode.Section.ParentSection is null
+                        && !catalog.RootItems.Exists(s => s.Name == e.Label)))
+                    {
+                        sectionNode.Section.Name = e.Label;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Section with such name already exists in the current section.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        _selectedNode.Text = sectionNode.Section.Name;
+                    }
+                }
+
+                if (_selectedNode is ElementNode elementNode)
+                {
+                    if (!elementNode.Element.ParentSection!.Elements.Exists(el => el.Name == e.Label))
+                    {
+                        elementNode.Element.Name = e.Label;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Element with such name already exists in the current section.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        _selectedNode.Text = elementNode.Element.Name;
+                    }
+                }
             }
         }
     }

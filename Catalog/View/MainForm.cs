@@ -34,6 +34,7 @@ namespace BookCatalog
         public event EventHandler AddSection;
         public event EventHandler AddElement;
         public event EventHandler Remove;
+        public event NodeLabelEditEventHandler TreeNodeNameEdited;
 
         private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
         {
@@ -77,16 +78,22 @@ namespace BookCatalog
         private void AddSection_Click(object sender, EventArgs e)
         {
             AddSection?.Invoke(sender, e);
-        }     
+        }
 
         private void AddElementBtn_Click(object sender, EventArgs e)
         {
             AddElement?.Invoke(sender, e);
         }
-      
+
         private void Remove_Click(object sender, EventArgs e)
         {
             Remove?.Invoke(sender, e);
+        }
+
+        private void treeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            this.BeginInvoke(new Action(() => TreeNodeNameEdited?.Invoke(sender, e)));
+            //TreeNodeNameEdited?.Invoke(sender, e);
         }
     }
 }

@@ -45,10 +45,12 @@
             // treeView
             // 
             treeView.AllowDrop = true;
+            treeView.LabelEdit = true;
             treeView.Location = new Point(6, 64);
             treeView.Name = "treeView";
             treeView.Size = new Size(361, 294);
             treeView.TabIndex = 0;
+            treeView.AfterLabelEdit += treeView_AfterLabelEdit;
             treeView.ItemDrag += treeView_ItemDrag;
             treeView.NodeMouseHover += treeView_NodeMouseHover;
             treeView.NodeMouseClick += treeView_NodeMouseClick;

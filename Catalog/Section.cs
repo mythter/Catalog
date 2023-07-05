@@ -73,6 +73,7 @@ namespace BookCatalog
 
             if (ChildSections.Remove(section))
             {
+                section.ParentSection = null;
                 return true;
             }
 
@@ -80,6 +81,7 @@ namespace BookCatalog
             {
                 if (s.ChildSections.Remove(section))
                 {
+                    section.ParentSection = null;
                     return true;
                 }
                 s.RemoveSection(section);
@@ -127,7 +129,6 @@ namespace BookCatalog
             }
 
             Elements.Add(element);
-
             element.ParentSection = this;
         }
 
@@ -145,6 +146,7 @@ namespace BookCatalog
 
             if (Elements.Remove(element))
             {
+                element.ParentSection = null;
                 return true;
             }
 
@@ -152,6 +154,7 @@ namespace BookCatalog
             {
                 if (s.Elements.Remove(element))
                 {
+                    element.ParentSection = null;
                     return true;
                 }
                 s.RemoveElement(element);

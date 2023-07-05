@@ -17,6 +17,7 @@
         event TreeNodeMouseClickEventHandler OpenFile;
         event FormClosingEventHandler CloseEvent;
         event DataGridViewCellEventHandler ChangeAttributeValue;
+        event NodeLabelEditEventHandler TreeNodeNameEdited;
 
         // Buttons
         event EventHandler AddSection;

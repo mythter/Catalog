@@ -68,6 +68,7 @@
             {
                 if (s.ChildSections.Remove(section))
                 {
+                    section.ParentSection = null;
                     return true;
                 }
                 s.RemoveSection(section);
@@ -107,10 +108,10 @@
             {
                 if (s.Elements.Remove(element))
                 {
+                    element.ParentSection = null;
                     return true;
                 }
                 s.RemoveElement(element);
-
             }
 
             return false;
