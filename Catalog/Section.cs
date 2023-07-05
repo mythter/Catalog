@@ -1,4 +1,5 @@
 ﻿using BookCatalog.TreeViewHelper;
+using System.Text.Json.Serialization;
 using System.Xml.Linq;
 
 namespace BookCatalog
@@ -61,14 +62,30 @@ namespace BookCatalog
         /// </summary>
         /// <param name="section"> Section to remove. </param>
         /// <exception cref="ArgumentNullException"> Thrown when <paramref name="section"/> is null. </exception>
-        public void RemoveSection(Section section)
+        public bool RemoveSection(Section section)
         {
             if (section is null)
             {
                 throw new ArgumentNullException(nameof(section));
             }
 
-            ChildSections.Remove(section);
+            //return ChildSections.Remove(section);
+
+            if (ChildSections.Remove(section))
+            {
+                return true;
+            }
+
+            foreach (var s in ChildSections)
+            {
+                if (s.ChildSections.Remove(section))
+                {
+                    return true;
+                }
+                s.RemoveSection(section);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -119,15 +136,28 @@ namespace BookCatalog
         /// </summary>
         /// <param name="element"> Element to remove. </param>
         /// <exception cref="ArgumentNullException"> Thrown when <paramref name="element"/> is null. </exception>
-        public void RemoveElement(Element element)
+        public bool RemoveElement(Element element)
         {
             if (element is null)
             {
                 throw new ArgumentNullException(nameof(element));
             }
 
-            Elements.Remove(element);
+            if (Elements.Remove(element))
+            {
+                return true;
+            }
 
+            foreach (var s in ChildSections)
+            {
+                if (s.Elements.Remove(element))
+                {
+                    return true;
+                }
+                s.RemoveElement(element);
+            }
+
+            return false;
         }
 
         /// <summary>

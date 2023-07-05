@@ -1,0 +1,118 @@
+{
+  "$id": "1",
+  "RootItems": [
+    {
+      "$id": "2",
+      "$type": "BookCatalog.EBookSection, Catalog",
+      "ChildSections": [
+        {
+          "$id": "3",
+          "$type": "BookCatalog.EBookSection, Catalog",
+          "ChildSections": [
+            {
+              "$id": "4",
+              "$type": "BookCatalog.EBookSection, Catalog",
+              "ChildSections": [
+                {
+                  "$id": "5",
+                  "$type": "BookCatalog.EBookSection, Catalog",
+                  "ChildSections": [],
+                  "ParentSection": {
+                    "$ref": "4"
+                  },
+                  "Elements": [],
+                  "Name": "Section 7"
+                }
+              ],
+              "ParentSection": {
+                "$ref": "3"
+              },
+              "Elements": [
+                {
+                  "$id": "6",
+                  "$type": "BookCatalog.EBook, Catalog",
+                  "Title": "Book 123",
+                  "ParentSection": {
+                    "$ref": "4"
+                  },
+                  "Name": "Book 123"
+                },
+                {
+                  "$id": "7",
+                  "$type": "BookCatalog.EBook, Catalog",
+                  "Title": "Book 345",
+                  "ParentSection": {
+                    "$ref": "4"
+                  },
+                  "Name": "Book 345"
+                },
+                {
+                  "$id": "8",
+                  "$type": "BookCatalog.EBook, Catalog",
+                  "Title": "Book 563",
+                  "ParentSection": {
+                    "$ref": "4"
+                  },
+                  "Name": "Book 563"
+                }
+              ],
+              "Name": "Section 6"
+            }
+          ],
+          "ParentSection": {
+            "$ref": "2"
+          },
+          "Elements": [
+            {
+              "$id": "9",
+              "$type": "BookCatalog.EBook, Catalog",
+              "Title": "Good book",
+              "Author": "Good author",
+              "Path": "D:\\Универ\\Операционные системы\\crictecs2023-1 certificate.pdf",
+              "ParentSection": {
+                "$ref": "3"
+              },
+              "Name": "Good author - Good book"
+            },
+            {
+              "$id": "10",
+              "$type": "BookCatalog.EBook, Catalog",
+              "Title": "Book 14",
+              "ParentSection": {
+                "$ref": "3"
+              },
+              "Name": "Book 14"
+            }
+          ],
+          "Name": "Section 4"
+        },
+        {
+          "$id": "11",
+          "$type": "BookCatalog.EBookSection, Catalog",
+          "ChildSections": [],
+          "ParentSection": {
+            "$ref": "2"
+          },
+          "Elements": [],
+          "Name": "Section 5"
+        }
+      ],
+      "Elements": [],
+      "Name": "Section 1"
+    },
+    {
+      "$id": "12",
+      "$type": "BookCatalog.EBookSection, Catalog",
+      "ChildSections": [],
+      "Elements": [],
+      "Name": "Section 2"
+    },
+    {
+      "$id": "13",
+      "$type": "BookCatalog.EBookSection, Catalog",
+      "ChildSections": [],
+      "Elements": [],
+      "Name": "Section 3"
+    }
+  ]
+}

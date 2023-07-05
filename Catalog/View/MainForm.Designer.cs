@@ -30,6 +30,9 @@
         {
             treeView = new TreeView();
             catalogGroup = new GroupBox();
+            button3 = new Button();
+            button2 = new Button();
+            button1 = new Button();
             searchTextBox = new TextBox();
             attributesGroup = new GroupBox();
             dataGridView = new DataGridView();
@@ -44,7 +47,7 @@
             treeView.AllowDrop = true;
             treeView.Location = new Point(6, 64);
             treeView.Name = "treeView";
-            treeView.Size = new Size(361, 269);
+            treeView.Size = new Size(361, 294);
             treeView.TabIndex = 0;
             treeView.ItemDrag += treeView_ItemDrag;
             treeView.NodeMouseHover += treeView_NodeMouseHover;
@@ -55,15 +58,48 @@
             // 
             // catalogGroup
             // 
+            catalogGroup.Controls.Add(button3);
+            catalogGroup.Controls.Add(button2);
+            catalogGroup.Controls.Add(button1);
             catalogGroup.Controls.Add(searchTextBox);
             catalogGroup.Controls.Add(treeView);
             catalogGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             catalogGroup.Location = new Point(4, 2);
             catalogGroup.Name = "catalogGroup";
-            catalogGroup.Size = new Size(373, 344);
+            catalogGroup.Size = new Size(372, 403);
             catalogGroup.TabIndex = 1;
             catalogGroup.TabStop = false;
             catalogGroup.Text = "Catalog";
+            // 
+            // button3
+            // 
+            button3.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            button3.Location = new Point(257, 364);
+            button3.Name = "button3";
+            button3.Size = new Size(110, 30);
+            button3.TabIndex = 4;
+            button3.Text = "Remove";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            button2.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Location = new Point(122, 364);
+            button2.Name = "button2";
+            button2.Size = new Size(129, 30);
+            button2.TabIndex = 3;
+            button2.Text = "Add element";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(6, 364);
+            button1.Name = "button1";
+            button1.Size = new Size(110, 30);
+            button1.TabIndex = 2;
+            button1.Text = "Add section";
+            button1.UseVisualStyleBackColor = true;
             // 
             // searchTextBox
             // 
@@ -76,9 +112,9 @@
             // 
             attributesGroup.Controls.Add(dataGridView);
             attributesGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            attributesGroup.Location = new Point(4, 350);
+            attributesGroup.Location = new Point(4, 411);
             attributesGroup.Name = "attributesGroup";
-            attributesGroup.Size = new Size(373, 281);
+            attributesGroup.Size = new Size(373, 220);
             attributesGroup.TabIndex = 2;
             attributesGroup.TabStop = false;
             attributesGroup.Text = "Attributes";
@@ -122,7 +158,7 @@
             Controls.Add(catalogGroup);
             Name = "MainForm";
             Text = "EBooks Catalog";
-            Load += MainForm_Load;
+            FormClosing += MainForm_FormClosing;
             catalogGroup.ResumeLayout(false);
             catalogGroup.PerformLayout();
             attributesGroup.ResumeLayout(false);
@@ -138,5 +174,8 @@
         private DataGridView dataGridView;
         private Spire.PdfViewer.Forms.PdfViewer pdfViewer;
         private TextBox searchTextBox;
+        private Button button1;
+        private Button button3;
+        private Button button2;
     }
 }

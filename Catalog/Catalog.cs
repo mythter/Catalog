@@ -52,14 +52,28 @@
         /// </summary>
         /// <param name="section"> Section to remove. </param>
         /// <exception cref="ArgumentNullException"> Thrown when <paramref name="section"/> is null. </exception>
-        public void Remove(Section section)
+        public bool Remove(Section section)
         {
             if (section is null)
             {
                 throw new ArgumentNullException(nameof(section));
             }
 
-            RootItems.Remove(section);
+            if (RootItems.Remove(section))
+            {
+                return true;
+            }
+
+            foreach (var s in RootItems)
+            {
+                if (s.ChildSections.Remove(section))
+                {
+                    return true;
+                }
+                s.RemoveSection(section);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -80,6 +94,24 @@
             {
                 RootItems.Remove(sectionToRemove);
             }
+        }
+
+        public bool RemoveElementFromRootItems(Element element)
+        {
+            if (element is null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
+            foreach (var s in RootItems)
+            {
+                if (s.RemoveElement(element))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void PrintCatalogTree()

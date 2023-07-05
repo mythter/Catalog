@@ -17,5 +17,7 @@
 
         event TreeNodeMouseClickEventHandler ShowAttributes;
         event TreeNodeMouseClickEventHandler OpenFile;
+
+        event FormClosingEventHandler CloseEvent;
     }
 }
