@@ -100,6 +100,7 @@
             button1.TabIndex = 2;
             button1.Text = "Add section";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // searchTextBox
             // 
@@ -135,6 +136,7 @@
             // 
             // pdfViewer
             // 
+            pdfViewer.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pdfViewer.FindTextHighLightColor = Color.FromArgb(200, 153, 193, 218);
             pdfViewer.FormFillEnabled = false;
             pdfViewer.IgnoreCase = false;

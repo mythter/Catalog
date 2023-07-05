@@ -1,6 +1,8 @@
 ﻿using BookCatalog.TreeViewHelper;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Globalization;
+using System.Net.Security;
 
 namespace BookCatalog
 {
@@ -141,12 +143,30 @@ namespace BookCatalog
         {
             if (e.Node is ElementNode elementNode
                 && elementNode.Element is EBook eBook
-                && !string.IsNullOrEmpty(eBook.Path))
+                && File.Exists(eBook.Path))
             {
                 string path = eBook.Path;
-                if (path.Substring(path.LastIndexOf('.') + 1) == "pdf" && File.Exists(path))
+                if (path.Substring(path.LastIndexOf('.') + 1) == "pdf")
                 {
                     form.PdfViewer.LoadFromFile(path);
+                }
+                else
+                {
+                    try
+                    {
+                        var pi = new ProcessStartInfo(path)
+                        {
+                            Arguments = Path.GetFileName(path),
+                            UseShellExecute = true,
+                            WorkingDirectory = Path.GetDirectoryName(path),
+                            Verb = "OPEN"
+                        };
+                        Process.Start(pi);
+                    }
+                    catch (Exception )
+                    {
+                        MessageBox.Show("An error occurred while opening the file.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
