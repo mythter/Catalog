@@ -20,6 +20,7 @@
         event NodeLabelEditEventHandler TreeNodeNameEdited;
 
         // Buttons
+        event EventHandler AddRootSection;
         event EventHandler AddSection;
         event EventHandler AddElement;
         event EventHandler Remove;

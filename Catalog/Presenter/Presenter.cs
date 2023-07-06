@@ -11,7 +11,7 @@ namespace BookCatalog
         private readonly IView form;
         private TreeNode? _nodeToMove;
         private TreeNode? _selectedNode;
-        private BookCatalog catalog;
+        private readonly BookCatalog catalog;
 
         public Presenter(IView form)
         {
@@ -32,6 +32,7 @@ namespace BookCatalog
 
             form.Remove += Remove;
             form.AddSection += AddSection;
+            form.AddRootSection += AddRootSection;
             form.AddElement += AddElement;
 
             string json = File.ReadAllText("catalog.json");
@@ -64,11 +65,11 @@ namespace BookCatalog
                 Point pt = form.CatalogTree.PointToClient(new Point(e.X, e.Y));
                 TreeNode destinationNode = form.CatalogTree.GetNodeAt(pt);
 
-                if(destinationNode == sourceNode.Parent
+                if (destinationNode == sourceNode.Parent
                     || destinationNode == sourceNode
                     || (sourceNode is SectionNode secNode
                     && destinationNode is SectionNode secDestNode
-                    && secNode.Section.ContainsChild(secDestNode.Section))) 
+                    && secNode.Section.ContainsChild(secDestNode.Section)))
                 {
                     return;
                 }
@@ -266,36 +267,71 @@ namespace BookCatalog
 
         private void AddSection(object sender, EventArgs e)
         {
-            if (form.CatalogTree.SelectedNode is null)
+            if (_selectedNode is SectionNode sectionNode)
             {
                 int i = -1;
                 string name;
+
                 do
                 {
                     i++;
                     name = $"Section {i}";
                 }
-                while (catalog.Root.ChildSections.Exists(s => s.Name == $"Section {i}"));
+                while (sectionNode.Section.ChildSections.Exists(s => s.Name == name));
 
                 EBookSection newSection = new EBookSection(name);
-                catalog.Root.AddSection(newSection);
-                form.CatalogTree.Nodes.Add(new SectionNode(newSection));
-            }
+                SectionNode newNode = new SectionNode(newSection);
 
-            if (_selectedNode is SectionNode sectionNode)
+                sectionNode.Section.AddSection(newSection);
+                sectionNode.Nodes.Add(newNode);
+
+                form.CatalogTree.SelectedNode = newNode;
+            }
+        }
+
+        private void AddRootSection(object sender, EventArgs e)
+        {
+            int i = -1;
+            string name;
+
+            do
             {
-
+                i++;
+                name = $"Section {i}";
             }
+            while (catalog.Root.ChildSections.Exists(s => s.Name == name));
 
-            if (_selectedNode is ElementNode elementNode)
-            {
+            EBookSection newSection = new EBookSection(name);
+            SectionNode newNode = new SectionNode(newSection);
 
-            }
+            catalog.Root.AddSection(newSection);
+            form.CatalogTree.Nodes.Add(newNode);
+
+            form.CatalogTree.SelectedNode = newNode;
         }
 
         private void AddElement(object sender, EventArgs e)
         {
+            if (_selectedNode is SectionNode sectionNode)
+            {
+                int i = -1;
+                string name;
 
+                do
+                {
+                    i++;
+                    name = $"Element {i}";
+                }
+                while (sectionNode.Section.Elements.Exists(s => s.Name == name));
+
+                EBook newElement = new EBook(name);
+                ElementNode newNode = new ElementNode(newElement);
+
+                sectionNode.Section.AddElement(newElement);
+                sectionNode.Nodes.Add(newNode);
+
+                form.CatalogTree.SelectedNode = newNode;
+            }
         }
 
         private void Remove(object sender, EventArgs e)
@@ -313,6 +349,8 @@ namespace BookCatalog
                 catalog.Root.RemoveElement(elementNode.Element);
                 form.AttributesDataGrid.Columns.Clear();
             }
+
+            _selectedNode = null;
         }
 
         private void TreeNodeNameEdited(object sender, NodeLabelEditEventArgs e)

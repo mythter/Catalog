@@ -28,15 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             treeView = new TreeView();
             catalogGroup = new GroupBox();
-            RemoveBtn = new Button();
-            AddElementBtn = new Button();
-            AddSectionBtn = new Button();
+            AddRootSectionBtn = new FontAwesome.Sharp.IconButton();
+            RemoveBtn = new FontAwesome.Sharp.IconButton();
+            AddElementBtn = new FontAwesome.Sharp.IconButton();
+            AddSectionBtn = new FontAwesome.Sharp.IconButton();
             searchTextBox = new TextBox();
             attributesGroup = new GroupBox();
             dataGridView = new DataGridView();
             pdfViewer = new Spire.PdfViewer.Forms.PdfViewer();
+            AddRootTip = new ToolTip(components);
+            AddSectionTip = new ToolTip(components);
+            AddElementTip = new ToolTip(components);
+            RemoveTip = new ToolTip(components);
             catalogGroup.SuspendLayout();
             attributesGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
@@ -49,7 +55,7 @@
             treeView.LabelEdit = true;
             treeView.Location = new Point(6, 64);
             treeView.Name = "treeView";
-            treeView.Size = new Size(361, 294);
+            treeView.Size = new Size(360, 294);
             treeView.TabIndex = 0;
             treeView.AfterLabelEdit += treeView_AfterLabelEdit;
             treeView.ItemDrag += treeView_ItemDrag;
@@ -61,6 +67,7 @@
             // 
             // catalogGroup
             // 
+            catalogGroup.Controls.Add(AddRootSectionBtn);
             catalogGroup.Controls.Add(RemoveBtn);
             catalogGroup.Controls.Add(AddElementBtn);
             catalogGroup.Controls.Add(AddSectionBtn);
@@ -74,36 +81,59 @@
             catalogGroup.TabStop = false;
             catalogGroup.Text = "Catalog";
             // 
+            // AddRootSectionBtn
+            // 
+            AddRootSectionBtn.IconChar = FontAwesome.Sharp.IconChar.FolderTree;
+            AddRootSectionBtn.IconColor = Color.Black;
+            AddRootSectionBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            AddRootSectionBtn.IconSize = 30;
+            AddRootSectionBtn.Location = new Point(6, 364);
+            AddRootSectionBtn.Name = "AddRootSectionBtn";
+            AddRootSectionBtn.Size = new Size(85, 33);
+            AddRootSectionBtn.TabIndex = 8;
+            AddRootTip.SetToolTip(AddRootSectionBtn, "Add new root section");
+            AddRootSectionBtn.UseVisualStyleBackColor = true;
+            AddRootSectionBtn.Click += AddRootSectionBtn_Click;
+            // 
             // RemoveBtn
             // 
-            RemoveBtn.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            RemoveBtn.Location = new Point(257, 364);
+            RemoveBtn.IconChar = FontAwesome.Sharp.IconChar.Trash;
+            RemoveBtn.IconColor = Color.Black;
+            RemoveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            RemoveBtn.IconSize = 30;
+            RemoveBtn.Location = new Point(279, 364);
             RemoveBtn.Name = "RemoveBtn";
-            RemoveBtn.Size = new Size(110, 30);
-            RemoveBtn.TabIndex = 4;
-            RemoveBtn.Text = "Remove";
+            RemoveBtn.Size = new Size(85, 33);
+            RemoveBtn.TabIndex = 7;
+            RemoveTip.SetToolTip(RemoveBtn, "Remove element or section");
             RemoveBtn.UseVisualStyleBackColor = true;
             RemoveBtn.Click += Remove_Click;
             // 
             // AddElementBtn
             // 
-            AddElementBtn.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            AddElementBtn.Location = new Point(122, 364);
+            AddElementBtn.IconChar = FontAwesome.Sharp.IconChar.FileCirclePlus;
+            AddElementBtn.IconColor = Color.Black;
+            AddElementBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            AddElementBtn.IconSize = 30;
+            AddElementBtn.Location = new Point(188, 364);
             AddElementBtn.Name = "AddElementBtn";
-            AddElementBtn.Size = new Size(129, 30);
-            AddElementBtn.TabIndex = 3;
-            AddElementBtn.Text = "Add element";
+            AddElementBtn.Size = new Size(85, 33);
+            AddElementBtn.TabIndex = 6;
+            AddElementTip.SetToolTip(AddElementBtn, "Add new element");
             AddElementBtn.UseVisualStyleBackColor = true;
             AddElementBtn.Click += AddElementBtn_Click;
             // 
             // AddSectionBtn
             // 
-            AddSectionBtn.Font = new Font("Montserrat", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            AddSectionBtn.Location = new Point(6, 364);
+            AddSectionBtn.IconChar = FontAwesome.Sharp.IconChar.FolderPlus;
+            AddSectionBtn.IconColor = Color.Black;
+            AddSectionBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            AddSectionBtn.IconSize = 30;
+            AddSectionBtn.Location = new Point(97, 364);
             AddSectionBtn.Name = "AddSectionBtn";
-            AddSectionBtn.Size = new Size(110, 30);
-            AddSectionBtn.TabIndex = 2;
-            AddSectionBtn.Text = "Add section";
+            AddSectionBtn.Size = new Size(85, 33);
+            AddSectionBtn.TabIndex = 5;
+            AddSectionTip.SetToolTip(AddSectionBtn, "Add new section to current section");
             AddSectionBtn.UseVisualStyleBackColor = true;
             AddSectionBtn.Click += AddSection_Click;
             // 
@@ -182,8 +212,13 @@
         private DataGridView dataGridView;
         private Spire.PdfViewer.Forms.PdfViewer pdfViewer;
         private TextBox searchTextBox;
-        private Button AddSectionBtn;
-        private Button RemoveBtn;
-        private Button AddElementBtn;
+        private FontAwesome.Sharp.IconButton AddRootSectionBtn;
+        private FontAwesome.Sharp.IconButton AddSectionBtn;
+        private FontAwesome.Sharp.IconButton AddElementBtn;
+        private FontAwesome.Sharp.IconButton RemoveBtn;
+        private ToolTip AddRootTip;
+        private ToolTip AddSectionTip;
+        private ToolTip AddElementTip;
+        private ToolTip RemoveTip;
     }
 }
