@@ -45,6 +45,7 @@
             // treeView
             // 
             treeView.AllowDrop = true;
+            treeView.HideSelection = false;
             treeView.LabelEdit = true;
             treeView.Location = new Point(6, 64);
             treeView.Name = "treeView";

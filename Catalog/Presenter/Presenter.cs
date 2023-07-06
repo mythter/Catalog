@@ -250,6 +250,11 @@ namespace BookCatalog
                         {
                             eBook.Year = temp;
                         }
+                        else
+                        {
+                            MessageBox.Show("The Year value is not correct.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            form.AttributesDataGrid[e.ColumnIndex, e.RowIndex].Value = null;
+                        }
                         break;
 
                     case "Path":
@@ -261,6 +266,22 @@ namespace BookCatalog
 
         private void AddSection(object sender, EventArgs e)
         {
+            if (form.CatalogTree.SelectedNode is null)
+            {
+                int i = -1;
+                string name;
+                do
+                {
+                    i++;
+                    name = $"Section {i}";
+                }
+                while (catalog.Root.ChildSections.Exists(s => s.Name == $"Section {i}"));
+
+                EBookSection newSection = new EBookSection(name);
+                catalog.Root.AddSection(newSection);
+                form.CatalogTree.Nodes.Add(new SectionNode(newSection));
+            }
+
             if (_selectedNode is SectionNode sectionNode)
             {
 
