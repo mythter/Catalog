@@ -1,10 +1,11 @@
 ﻿using BookCatalog.TreeViewHelper;
+using Spire.Pdf.Exporting.XPS.Schema.Mc;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
 
 namespace BookCatalog
 {
-    public abstract class Section
+    public class Section
     {
         #region Properties
 
@@ -17,7 +18,7 @@ namespace BookCatalog
 
         #region Constructors
 
-        protected Section(string name)
+        public Section(string name)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -181,6 +182,30 @@ namespace BookCatalog
             {
                 ChildSections.Remove(elementToRemove);
             }
+        }
+
+        public bool ContainsChild(Section section)
+        {
+            if (section is null)
+            {
+                throw new ArgumentNullException(nameof(section));
+            }
+
+            if (ChildSections.Contains(section))
+            {
+                return true;
+            }
+
+            foreach (var s in ChildSections)
+            {
+                if (s.ChildSections.Contains(section))
+                {
+                    return true;
+                }
+                s.ContainsChild(section);
+            }
+
+            return false;
         }
 
         #endregion
