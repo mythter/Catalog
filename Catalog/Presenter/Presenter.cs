@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
-using System.Net.Security;
 
 namespace BookCatalog
 {
@@ -18,6 +17,9 @@ namespace BookCatalog
             this.form = form;
 
             form.PdfViewer.CanPrint = false;
+            form.PdfViewer.CanSave = false;
+
+            form.AttributesDataGrid.RowTemplate.Height = 35;
 
             form.TreeViewItemDrag += TreeViewItemDrag;
             form.TreeViewDragEnter += TreeViewDragEnter;
@@ -34,6 +36,7 @@ namespace BookCatalog
             form.AddSection += AddSection;
             form.AddRootSection += AddRootSection;
             form.AddElement += AddElement;
+            form.Search += Search;
 
             string json = File.ReadAllText("catalog.json");
             catalog = JsonConvert.DeserializeObject<BookCatalog>(json, new JsonSerializerSettings
@@ -53,6 +56,7 @@ namespace BookCatalog
         public void TreeViewDragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
+            SelectNode(_nodeToMove);
         }
 
         private void TreeViewDragDrop(object sender, DragEventArgs e)
@@ -129,8 +133,13 @@ namespace BookCatalog
         private void ShowAttributes(object sender, TreeNodeMouseClickEventArgs e)
         {
             _selectedNode = e.Node;
+            form.CatalogTree.SelectedNode = _selectedNode;
+            ShowAttributes(_selectedNode);
+        }
 
-            if (_selectedNode is SectionNode sectionNode)
+        private void ShowAttributes(TreeNode node)
+        {
+            if (node is SectionNode sectionNode)
             {
                 var section = sectionNode.Section;
 
@@ -147,7 +156,7 @@ namespace BookCatalog
                 }
             }
 
-            if (_selectedNode is ElementNode elementNode)
+            if (node is ElementNode elementNode)
             {
                 var element = elementNode.Element;
 
@@ -171,10 +180,16 @@ namespace BookCatalog
         private void OpenFile(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Node is ElementNode elementNode
-                && elementNode.Element is EBook eBook
-                && File.Exists(eBook.Path))
+                && elementNode.Element is EBook)
             {
-                string path = eBook.Path;
+                string? path = ((EBook)((ElementNode)e.Node).Element).Path;
+
+                if (path is null || !File.Exists(path))
+                {
+                    MessageBox.Show("File path is not correct.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (path.Substring(path.LastIndexOf('.') + 1) == "pdf")
                 {
                     form.PdfViewer.LoadFromFile(path);
@@ -285,7 +300,7 @@ namespace BookCatalog
                 sectionNode.Section.AddSection(newSection);
                 sectionNode.Nodes.Add(newNode);
 
-                form.CatalogTree.SelectedNode = newNode;
+                SelectNode(newNode);
             }
         }
 
@@ -307,7 +322,7 @@ namespace BookCatalog
             catalog.Root.AddSection(newSection);
             form.CatalogTree.Nodes.Add(newNode);
 
-            form.CatalogTree.SelectedNode = newNode;
+            SelectNode(newNode);
         }
 
         private void AddElement(object sender, EventArgs e)
@@ -330,7 +345,7 @@ namespace BookCatalog
                 sectionNode.Section.AddElement(newElement);
                 sectionNode.Nodes.Add(newNode);
 
-                form.CatalogTree.SelectedNode = newNode;
+                SelectNode(newNode);
             }
         }
 
@@ -386,6 +401,67 @@ namespace BookCatalog
                     }
                 }
             }
+        }
+
+        private void Search(object sender, EventArgs e)
+        {
+            string search = form.SearchTextBox.ToLower();
+
+            if (string.IsNullOrEmpty(search))
+            {
+                return;
+            }
+
+            ElementNode? elementNode;
+            foreach (var node in form.CatalogTree.Nodes)
+            {
+                elementNode = FindNode(search, (TreeNode)node);
+                if (elementNode is not null)
+                {
+                    SelectNode(elementNode);
+                    return;
+                }
+
+            }
+        }
+
+        private ElementNode? FindNode(string search, TreeNode treeNode)
+        {
+            foreach (var node in treeNode.Nodes)
+            {
+                if (node is ElementNode elementNode
+                    && elementNode.Element is EBook eBook
+                    && (eBook.Name.ToLower().Contains(search) || eBook.Title.ToLower().Contains(search)))
+                {
+                    return elementNode;
+                }
+            }
+
+            foreach (var node in treeNode.Nodes)
+            {
+                if (node is SectionNode sectionNode)
+                {
+                    ElementNode? elementNode = FindNode(search, sectionNode);
+                    if (elementNode is not null)
+                    {
+                        return elementNode;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private void SelectNode(TreeNode? node)
+        {
+            if (node is not null)
+            {
+                _selectedNode = node;
+                form.CatalogTree.SelectedNode = _selectedNode;
+                form.CatalogTree.Focus();
+                ShowAttributes(_selectedNode);
+            }
+
         }
     }
 }

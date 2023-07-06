@@ -31,6 +31,7 @@
             components = new System.ComponentModel.Container();
             treeView = new TreeView();
             catalogGroup = new GroupBox();
+            SearchBtn = new FontAwesome.Sharp.IconButton();
             AddRootSectionBtn = new FontAwesome.Sharp.IconButton();
             RemoveBtn = new FontAwesome.Sharp.IconButton();
             AddElementBtn = new FontAwesome.Sharp.IconButton();
@@ -67,6 +68,7 @@
             // 
             // catalogGroup
             // 
+            catalogGroup.Controls.Add(SearchBtn);
             catalogGroup.Controls.Add(AddRootSectionBtn);
             catalogGroup.Controls.Add(RemoveBtn);
             catalogGroup.Controls.Add(AddElementBtn);
@@ -80,6 +82,19 @@
             catalogGroup.TabIndex = 1;
             catalogGroup.TabStop = false;
             catalogGroup.Text = "Catalog";
+            // 
+            // SearchBtn
+            // 
+            SearchBtn.IconChar = FontAwesome.Sharp.IconChar.MagnifyingGlass;
+            SearchBtn.IconColor = Color.Black;
+            SearchBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            SearchBtn.IconSize = 25;
+            SearchBtn.Location = new Point(316, 26);
+            SearchBtn.Name = "SearchBtn";
+            SearchBtn.Size = new Size(48, 30);
+            SearchBtn.TabIndex = 9;
+            SearchBtn.UseVisualStyleBackColor = true;
+            SearchBtn.Click += SearchBtn_Click;
             // 
             // AddRootSectionBtn
             // 
@@ -141,7 +156,7 @@
             // 
             searchTextBox.Location = new Point(6, 27);
             searchTextBox.Name = "searchTextBox";
-            searchTextBox.Size = new Size(361, 28);
+            searchTextBox.Size = new Size(304, 28);
             searchTextBox.TabIndex = 1;
             // 
             // attributesGroup
@@ -220,5 +235,6 @@
         private ToolTip AddSectionTip;
         private ToolTip AddElementTip;
         private ToolTip RemoveTip;
+        private FontAwesome.Sharp.IconButton SearchBtn;
     }
 }

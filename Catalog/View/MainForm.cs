@@ -28,6 +28,7 @@ namespace BookCatalog
         public event DragEventHandler TreeViewDragEnter;
         public event TreeNodeMouseClickEventHandler ShowAttributes;
         public event TreeNodeMouseHoverEventHandler TreeNodeMouseHover;
+        public event NodeLabelEditEventHandler TreeNodeNameEdited;
         public event TreeNodeMouseClickEventHandler OpenFile;
         public event FormClosingEventHandler CloseEvent;
         public event DataGridViewCellEventHandler ChangeAttributeValue;
@@ -35,7 +36,7 @@ namespace BookCatalog
         public event EventHandler AddSection;
         public event EventHandler AddElement;
         public event EventHandler Remove;
-        public event NodeLabelEditEventHandler TreeNodeNameEdited;
+        public event EventHandler Search;
 
         private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
         {
@@ -100,6 +101,11 @@ namespace BookCatalog
         {
             this.BeginInvoke(new Action(() => TreeNodeNameEdited?.Invoke(sender, e)));
             //TreeNodeNameEdited?.Invoke(sender, e);
+        }
+
+        private void SearchBtn_Click(object sender, EventArgs e)
+        {
+            Search?.Invoke(sender, e);
         }
     }
 }

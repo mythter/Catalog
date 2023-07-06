@@ -24,5 +24,6 @@
         event EventHandler AddSection;
         event EventHandler AddElement;
         event EventHandler Remove;
+        event EventHandler Search;
     }
 }
