@@ -21,7 +21,6 @@ namespace BookCatalog
 
             form.AttributesDataGrid.RowTemplate.Height = 35;
 
-            form.TreeViewItemDrag += TreeViewItemDrag;
             form.TreeViewDragEnter += TreeViewDragEnter;
             form.TreeViewDragDrop += TreeViewDragDrop;
             form.TreeNodeMouseHover += TreeNodeMouseHover;
@@ -57,11 +56,6 @@ namespace BookCatalog
             }
         }
 
-        public void TreeViewItemDrag(object? sender, ItemDragEventArgs e)
-        {
-            _nodeToMove = e.Item as TreeNode;
-        }
-
         public void TreeViewDragEnter(object? sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
@@ -71,7 +65,6 @@ namespace BookCatalog
         private void TreeViewDragDrop(object? sender, DragEventArgs e)
         {
             TreeNode? sourceNode = _nodeToMove;
-            //System.Windows.Forms.TreeView? tree = sender as System.Windows.Forms.TreeView;
 
             if (sourceNode is not null /* && tree is not null*/)
             {
@@ -226,14 +219,14 @@ namespace BookCatalog
 
         private void Close(object? sender, FormClosingEventArgs e)
         {
-            JsonSerializer serializer = new JsonSerializer();
+            JsonSerializer serializer = new();
             serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
             serializer.TypeNameHandling = TypeNameHandling.Auto;
             serializer.Formatting = Formatting.Indented;
             serializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
 
-            using (StreamWriter sw = new StreamWriter("catalog.json"))
+            using (StreamWriter sw = new("catalog.json"))
             {
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
@@ -303,8 +296,8 @@ namespace BookCatalog
                 }
                 while (sectionNode.Section.ChildSections.Exists(s => s.Name == name));
 
-                EBookSection newSection = new EBookSection(name);
-                SectionNode newNode = new SectionNode(newSection);
+                EBookSection newSection = new(name);
+                SectionNode newNode = new(newSection);
 
                 sectionNode.Section.AddSection(newSection);
                 sectionNode.Nodes.Add(newNode);
@@ -325,8 +318,8 @@ namespace BookCatalog
             }
             while (catalog.Root.ChildSections.Exists(s => s.Name == name));
 
-            EBookSection newSection = new EBookSection(name);
-            SectionNode newNode = new SectionNode(newSection);
+            EBookSection newSection = new(name);
+            SectionNode newNode = new(newSection);
 
             catalog.Root.AddSection(newSection);
             form.CatalogTree.Nodes.Add(newNode);
@@ -348,8 +341,8 @@ namespace BookCatalog
                 }
                 while (sectionNode.Section.Elements.Exists(s => s.Name == name));
 
-                EBook newElement = new EBook(name);
-                ElementNode newNode = new ElementNode(newElement);
+                EBook newElement = new(name);
+                ElementNode newNode = new(newElement);
 
                 sectionNode.Section.AddElement(newElement);
                 sectionNode.Nodes.Add(newNode);
@@ -443,7 +436,6 @@ namespace BookCatalog
                     SelectNode(elementNode);
                     return;
                 }
-
             }
         }
 
@@ -483,9 +475,6 @@ namespace BookCatalog
                 form.CatalogTree.Focus();
                 ShowAttributes(_selectedNode);
             }
-
         }
-
-
     }
 }

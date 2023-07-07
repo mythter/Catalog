@@ -1,9 +1,4 @@
-﻿using BookCatalog.TreeViewHelper;
-using Spire.Pdf.Exporting.XPS.Schema.Mc;
-using System.Text.Json.Serialization;
-using System.Xml.Linq;
-
-namespace BookCatalog
+﻿namespace BookCatalog
 {
     public class Section
     {
@@ -182,6 +177,12 @@ namespace BookCatalog
             }
         }
 
+        /// <summary>
+        /// Method that recursively searches for subsection in current section.
+        /// </summary>
+        /// <param name="section"> section to search </param>
+        /// <returns> <see langword="true"/> if section contains given child; otherwise <see langword="false"/> </returns>
+        /// <exception cref="ArgumentNullException"> Thrown when <paramref name="section"/> is null. </exception>
         public bool ContainsChild(Section section)
         {
             if (section is null)

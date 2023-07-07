@@ -8,13 +8,14 @@ namespace BookCatalog
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
 
-        private PrivateFontCollection? fonts = new PrivateFontCollection();
+        private PrivateFontCollection? fonts = new();
 
         Font? MontserratFontRegular;
         #endregion
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S4487:Unread \"private\" fields should be removed", Justification = "Presenter module needs to do all main logic")]
         private Presenter? presenter;
+
         public MainForm()
         {
             InitializeComponent();
@@ -54,7 +55,6 @@ namespace BookCatalog
 #pragma warning restore S2292 // Trivial properties should be auto-implemented
 
         // Implementing IView interface events
-        public event ItemDragEventHandler? TreeViewItemDrag;
         public event DragEventHandler? TreeViewDragDrop;
         public event DragEventHandler? TreeViewDragEnter;
         public event TreeNodeMouseClickEventHandler? ShowAttributes;
@@ -70,34 +70,35 @@ namespace BookCatalog
         public event EventHandler? Search;
         public event KeyPressEventHandler? SearchTextBoxKeyPressEvent;
 
-        private void treeView_ItemDrag(object sender, ItemDragEventArgs e)
+        private void TreeView_ItemDrag(object sender, ItemDragEventArgs e)
         {
             if (e.Item is not null)
             {
                 DoDragDrop(e.Item, DragDropEffects.Move);
             }
-            //TreeViewItemDrag?.Invoke(sender, e);
         }
-        private void treeView_DragEnter(object sender, DragEventArgs e)
+
+        private void TreeView_DragEnter(object sender, DragEventArgs e)
         {
             TreeViewDragEnter?.Invoke(sender, e);
         }
-        private void treeView_DragDrop(object sender, DragEventArgs e)
+
+        private void TreeView_DragDrop(object sender, DragEventArgs e)
         {
             TreeViewDragDrop?.Invoke(sender, e);
         }
 
-        private void treeView_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
+        private void TreeView_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
         {
             TreeNodeMouseHover?.Invoke(sender, e);
         }
 
-        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             ShowAttributes?.Invoke(sender, e);
         }
 
-        private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             OpenFile?.Invoke(sender, e);
         }
@@ -107,7 +108,7 @@ namespace BookCatalog
             CloseEvent?.Invoke(sender, e);
         }
 
-        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             ChangeAttributeValue?.Invoke(sender, e);
         }
@@ -132,10 +133,9 @@ namespace BookCatalog
             Remove?.Invoke(sender, e);
         }
 
-        private void treeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             this.BeginInvoke(new Action(() => TreeNodeNameEdited?.Invoke(sender, e)));
-            //TreeNodeNameEdited?.Invoke(sender, e);
         }
 
         private void SearchBtn_Click(object sender, EventArgs e)
@@ -143,7 +143,7 @@ namespace BookCatalog
             Search?.Invoke(sender, e);
         }
 
-        private void searchTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void SearchTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             SearchTextBoxKeyPressEvent?.Invoke(sender, e);
         }

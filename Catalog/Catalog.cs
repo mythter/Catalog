@@ -5,7 +5,7 @@
         #region Properties
 
         /// <summary>
-        /// List of all catalog items.
+        /// Property that contains all catalog items.
         /// </summary>
         public Section Root { get; set; }
 
@@ -20,8 +20,10 @@
 
         public Catalog(Section section)
         {
-            Root = new Section("root");
-            Root.ChildSections = new List<Section> { section };
+            Root = new Section("root")
+            {
+                ChildSections = new List<Section> { section }
+            };
         }
 
         #endregion

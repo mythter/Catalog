@@ -6,7 +6,7 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            BookCatalog.BookCatalog catalog = new BookCatalog.BookCatalog();
+            BookCatalog.BookCatalog catalog = new();
 
             catalog.Root.AddSection(new EBookSection("Section 1"));
             catalog.Root.AddSection(new EBookSection("Section 2"));
@@ -30,8 +30,6 @@ namespace ConsoleTests
                 sec.AddElement(new EBook($"Book {i++}"));
                 sec.AddElement(new EBook($"Book {i++}"));
             }
-
-            //catalog.PrintCatalogTree();
         }
     }
 }

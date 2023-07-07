@@ -11,8 +11,10 @@
 
         public BookCatalog(Section section)
         {
-            Root = new EBookSection("root");
-            Root.ChildSections = new List<Section> { section };
+            Root = new EBookSection("root")
+            {
+                ChildSections = new List<Section> { section }
+            };
         }
 
         #endregion

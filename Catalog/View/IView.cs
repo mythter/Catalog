@@ -9,7 +9,6 @@
         Spire.PdfViewer.Forms.PdfViewer PdfViewer { get; set; }
 
         // Events
-        event ItemDragEventHandler TreeViewItemDrag;
         event DragEventHandler TreeViewDragDrop;
         event DragEventHandler TreeViewDragEnter;
         event TreeNodeMouseHoverEventHandler TreeNodeMouseHover;

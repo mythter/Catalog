@@ -64,13 +64,13 @@
             CatalogTreeView.Name = "CatalogTreeView";
             CatalogTreeView.Size = new Size(360, 294);
             CatalogTreeView.TabIndex = 0;
-            CatalogTreeView.AfterLabelEdit += treeView_AfterLabelEdit;
-            CatalogTreeView.ItemDrag += treeView_ItemDrag;
-            CatalogTreeView.NodeMouseHover += treeView_NodeMouseHover;
-            CatalogTreeView.NodeMouseClick += treeView_NodeMouseClick;
-            CatalogTreeView.NodeMouseDoubleClick += treeView_NodeMouseDoubleClick;
-            CatalogTreeView.DragDrop += treeView_DragDrop;
-            CatalogTreeView.DragEnter += treeView_DragEnter;
+            CatalogTreeView.AfterLabelEdit += TreeView_AfterLabelEdit;
+            CatalogTreeView.ItemDrag += TreeView_ItemDrag;
+            CatalogTreeView.NodeMouseHover += TreeView_NodeMouseHover;
+            CatalogTreeView.NodeMouseClick += TreeView_NodeMouseClick;
+            CatalogTreeView.NodeMouseDoubleClick += TreeView_NodeMouseDoubleClick;
+            CatalogTreeView.DragDrop += TreeView_DragDrop;
+            CatalogTreeView.DragEnter += TreeView_DragEnter;
             // 
             // CatalogGroup
             // 
@@ -188,7 +188,7 @@
             TextBoxSearch.Name = "TextBoxSearch";
             TextBoxSearch.Size = new Size(304, 28);
             TextBoxSearch.TabIndex = 1;
-            TextBoxSearch.KeyPress += searchTextBox_KeyPress;
+            TextBoxSearch.KeyPress += SearchTextBox_KeyPress;
             // 
             // AttributesGroup
             // 
@@ -215,7 +215,7 @@
             AttributesDataGridView.RowTemplate.Height = 29;
             AttributesDataGridView.Size = new Size(374, 190);
             AttributesDataGridView.TabIndex = 0;
-            AttributesDataGridView.CellEndEdit += dataGridView_CellEndEdit;
+            AttributesDataGridView.CellEndEdit += DataGridView_CellEndEdit;
             // 
             // PdfViewerControl
             // 
