@@ -4,9 +4,16 @@
     {
         #region Constructors
 
-        public BookCatalog() : base() { }
+        public BookCatalog()
+        {
+            Root = new EBookSection("root");
+        }
 
-        public BookCatalog(Section section) : base(section) { }
+        public BookCatalog(Section section)
+        {
+            Root = new EBookSection("root");
+            Root.ChildSections = new List<Section> { section };
+        }
 
         #endregion
     }

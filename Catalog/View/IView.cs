@@ -13,11 +13,12 @@
         event DragEventHandler TreeViewDragDrop;
         event DragEventHandler TreeViewDragEnter;
         event TreeNodeMouseHoverEventHandler TreeNodeMouseHover;
+        event NodeLabelEditEventHandler TreeNodeNameEdited;
         event TreeNodeMouseClickEventHandler ShowAttributes;
         event TreeNodeMouseClickEventHandler OpenFile;
         event FormClosingEventHandler CloseEvent;
         event DataGridViewCellEventHandler ChangeAttributeValue;
-        event NodeLabelEditEventHandler TreeNodeNameEdited;
+        event KeyPressEventHandler SearchTextBoxKeyPressEvent;
 
         // Buttons
         event EventHandler AddRootSection;
@@ -25,5 +26,11 @@
         event EventHandler AddElement;
         event EventHandler Remove;
         event EventHandler Search;
+
+        // Main form properties
+        int FormWidth { get; }
+        int FormHeight { get; }
+        int FormX { get; }
+        int FormY { get; }
     }
 }

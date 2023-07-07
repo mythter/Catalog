@@ -70,8 +70,6 @@ namespace BookCatalog
                 throw new ArgumentNullException(nameof(section));
             }
 
-            //return ChildSections.Remove(section);
-
             if (ChildSections.Remove(section))
             {
                 section.ParentSection = null;

@@ -31,6 +31,7 @@ namespace BookCatalog
             form.OpenFile += OpenFile;
             form.CloseEvent += Close;
             form.ChangeAttributeValue += ChangeAttributeValue;
+            form.SearchTextBoxKeyPressEvent += SearchTextBoxKeyPress;
 
             form.Remove += Remove;
             form.AddSection += AddSection;
@@ -38,28 +39,36 @@ namespace BookCatalog
             form.AddElement += AddElement;
             form.Search += Search;
 
-            string json = File.ReadAllText("catalog.json");
-            catalog = JsonConvert.DeserializeObject<BookCatalog>(json, new JsonSerializerSettings
+            if (File.Exists("catalog.json"))
             {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-            }) ?? new BookCatalog();
+                string json = File.ReadAllText("catalog.json");
+                catalog = JsonConvert.DeserializeObject<BookCatalog>(json, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore,
+                }) ?? new BookCatalog();
 
-            catalog.Root.ChildSections.ForEach(r => form.CatalogTree.Nodes.Add(new SectionNode(r)));
+                catalog.Root.ChildSections.ForEach(r => form.CatalogTree.Nodes.Add(new SectionNode(r)));
+            }
+            else
+            {
+                File.Create("catalog.json");
+                catalog = new BookCatalog();
+            }
         }
 
-        public void TreeViewItemDrag(object sender, ItemDragEventArgs e)
+        public void TreeViewItemDrag(object? sender, ItemDragEventArgs e)
         {
             _nodeToMove = e.Item as TreeNode;
         }
 
-        public void TreeViewDragEnter(object sender, DragEventArgs e)
+        public void TreeViewDragEnter(object? sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
             SelectNode(_nodeToMove);
         }
 
-        private void TreeViewDragDrop(object sender, DragEventArgs e)
+        private void TreeViewDragDrop(object? sender, DragEventArgs e)
         {
             TreeNode? sourceNode = _nodeToMove;
             //System.Windows.Forms.TreeView? tree = sender as System.Windows.Forms.TreeView;
@@ -125,12 +134,12 @@ namespace BookCatalog
             }
         }
 
-        private void TreeNodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
+        private void TreeNodeMouseHover(object? sender, TreeNodeMouseHoverEventArgs e)
         {
             _nodeToMove = e.Node;
         }
 
-        private void ShowAttributes(object sender, TreeNodeMouseClickEventArgs e)
+        private void ShowAttributes(object? sender, TreeNodeMouseClickEventArgs e)
         {
             _selectedNode = e.Node;
             form.CatalogTree.SelectedNode = _selectedNode;
@@ -149,7 +158,7 @@ namespace BookCatalog
                     form.AttributesDataGrid.ColumnCount = 2;
                     form.AttributesDataGrid.Columns[0].ReadOnly = true;
                     form.AttributesDataGrid.Columns[0].Width =
-                    form.AttributesDataGrid.Columns[1].Width = 178;
+                    form.AttributesDataGrid.Columns[1].Width = (form.AttributesDataGrid.Width / 2) - 2;
                     form.AttributesDataGrid.Columns[0].DefaultCellStyle.Font = new Font(form.AttributesDataGrid.Font, FontStyle.Bold);
 
                     form.AttributesDataGrid.Rows.Add("Theme", ebookSection.Theme ?? "");
@@ -166,7 +175,7 @@ namespace BookCatalog
                     form.AttributesDataGrid.ColumnCount = 2;
                     form.AttributesDataGrid.Columns[0].ReadOnly = true;
                     form.AttributesDataGrid.Columns[0].Width =
-                    form.AttributesDataGrid.Columns[1].Width = 178;
+                    form.AttributesDataGrid.Columns[1].Width = (form.AttributesDataGrid.Width / 2) - 2;
                     form.AttributesDataGrid.Columns[0].DefaultCellStyle.Font = new Font(form.AttributesDataGrid.Font, FontStyle.Bold);
 
                     form.AttributesDataGrid.Rows.Add("Title", eBook.Title ?? "");
@@ -177,7 +186,7 @@ namespace BookCatalog
             }
         }
 
-        private void OpenFile(object sender, TreeNodeMouseClickEventArgs e)
+        private void OpenFile(object? sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Node is ElementNode elementNode
                 && elementNode.Element is EBook)
@@ -215,7 +224,7 @@ namespace BookCatalog
             }
         }
 
-        private void Close(object sender, FormClosingEventArgs e)
+        private void Close(object? sender, FormClosingEventArgs e)
         {
             JsonSerializer serializer = new JsonSerializer();
             serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
@@ -233,7 +242,7 @@ namespace BookCatalog
             }
         }
 
-        private void ChangeAttributeValue(object sender, DataGridViewCellEventArgs e)
+        private void ChangeAttributeValue(object? sender, DataGridViewCellEventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
             {
@@ -280,7 +289,7 @@ namespace BookCatalog
             }
         }
 
-        private void AddSection(object sender, EventArgs e)
+        private void AddSection(object? sender, EventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
             {
@@ -304,7 +313,7 @@ namespace BookCatalog
             }
         }
 
-        private void AddRootSection(object sender, EventArgs e)
+        private void AddRootSection(object? sender, EventArgs e)
         {
             int i = -1;
             string name;
@@ -325,7 +334,7 @@ namespace BookCatalog
             SelectNode(newNode);
         }
 
-        private void AddElement(object sender, EventArgs e)
+        private void AddElement(object? sender, EventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
             {
@@ -349,7 +358,7 @@ namespace BookCatalog
             }
         }
 
-        private void Remove(object sender, EventArgs e)
+        private void Remove(object? sender, EventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
             {
@@ -368,7 +377,7 @@ namespace BookCatalog
             _selectedNode = null;
         }
 
-        private void TreeNodeNameEdited(object sender, NodeLabelEditEventArgs e)
+        private void TreeNodeNameEdited(object? sender, NodeLabelEditEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.Label))
             {
@@ -403,7 +412,20 @@ namespace BookCatalog
             }
         }
 
-        private void Search(object sender, EventArgs e)
+        private void SearchTextBoxKeyPress(object? sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SearchElement();
+            }
+        }
+
+        private void Search(object? sender, EventArgs e)
+        {
+            SearchElement();
+        }
+
+        private void SearchElement()
         {
             string search = form.SearchTextBox.ToLower();
 
@@ -463,5 +485,7 @@ namespace BookCatalog
             }
 
         }
+
+
     }
 }

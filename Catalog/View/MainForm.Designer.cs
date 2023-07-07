@@ -29,204 +29,254 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            treeView = new TreeView();
-            catalogGroup = new GroupBox();
-            SearchBtn = new FontAwesome.Sharp.IconButton();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            CatalogTreeView = new TreeView();
+            CatalogGroup = new GroupBox();
+            CatalogButtonsTableLayoutPanel = new TableLayoutPanel();
             AddRootSectionBtn = new FontAwesome.Sharp.IconButton();
-            RemoveBtn = new FontAwesome.Sharp.IconButton();
-            AddElementBtn = new FontAwesome.Sharp.IconButton();
             AddSectionBtn = new FontAwesome.Sharp.IconButton();
-            searchTextBox = new TextBox();
-            attributesGroup = new GroupBox();
-            dataGridView = new DataGridView();
-            pdfViewer = new Spire.PdfViewer.Forms.PdfViewer();
+            AddElementBtn = new FontAwesome.Sharp.IconButton();
+            RemoveBtn = new FontAwesome.Sharp.IconButton();
+            SearchBtn = new FontAwesome.Sharp.IconButton();
+            TextBoxSearch = new TextBox();
+            AttributesGroup = new GroupBox();
+            AttributesDataGridView = new DataGridView();
             AddRootTip = new ToolTip(components);
             AddSectionTip = new ToolTip(components);
             AddElementTip = new ToolTip(components);
             RemoveTip = new ToolTip(components);
-            catalogGroup.SuspendLayout();
-            attributesGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            PdfViewerControl = new Spire.PdfViewer.Forms.PdfViewer();
+            MainTableLayoutPanel = new TableLayoutPanel();
+            CatalogGroup.SuspendLayout();
+            CatalogButtonsTableLayoutPanel.SuspendLayout();
+            AttributesGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)AttributesDataGridView).BeginInit();
+            MainTableLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // treeView
+            // CatalogTreeView
             // 
-            treeView.AllowDrop = true;
-            treeView.HideSelection = false;
-            treeView.LabelEdit = true;
-            treeView.Location = new Point(6, 64);
-            treeView.Name = "treeView";
-            treeView.Size = new Size(360, 294);
-            treeView.TabIndex = 0;
-            treeView.AfterLabelEdit += treeView_AfterLabelEdit;
-            treeView.ItemDrag += treeView_ItemDrag;
-            treeView.NodeMouseHover += treeView_NodeMouseHover;
-            treeView.NodeMouseClick += treeView_NodeMouseClick;
-            treeView.NodeMouseDoubleClick += treeView_NodeMouseDoubleClick;
-            treeView.DragDrop += treeView_DragDrop;
-            treeView.DragEnter += treeView_DragEnter;
+            CatalogTreeView.AllowDrop = true;
+            CatalogTreeView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            CatalogTreeView.HideSelection = false;
+            CatalogTreeView.LabelEdit = true;
+            CatalogTreeView.Location = new Point(9, 64);
+            CatalogTreeView.Name = "CatalogTreeView";
+            CatalogTreeView.Size = new Size(360, 294);
+            CatalogTreeView.TabIndex = 0;
+            CatalogTreeView.AfterLabelEdit += treeView_AfterLabelEdit;
+            CatalogTreeView.ItemDrag += treeView_ItemDrag;
+            CatalogTreeView.NodeMouseHover += treeView_NodeMouseHover;
+            CatalogTreeView.NodeMouseClick += treeView_NodeMouseClick;
+            CatalogTreeView.NodeMouseDoubleClick += treeView_NodeMouseDoubleClick;
+            CatalogTreeView.DragDrop += treeView_DragDrop;
+            CatalogTreeView.DragEnter += treeView_DragEnter;
             // 
-            // catalogGroup
+            // CatalogGroup
             // 
-            catalogGroup.Controls.Add(SearchBtn);
-            catalogGroup.Controls.Add(AddRootSectionBtn);
-            catalogGroup.Controls.Add(RemoveBtn);
-            catalogGroup.Controls.Add(AddElementBtn);
-            catalogGroup.Controls.Add(AddSectionBtn);
-            catalogGroup.Controls.Add(searchTextBox);
-            catalogGroup.Controls.Add(treeView);
-            catalogGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            catalogGroup.Location = new Point(4, 2);
-            catalogGroup.Name = "catalogGroup";
-            catalogGroup.Size = new Size(372, 403);
-            catalogGroup.TabIndex = 1;
-            catalogGroup.TabStop = false;
-            catalogGroup.Text = "Catalog";
+            CatalogGroup.Controls.Add(CatalogButtonsTableLayoutPanel);
+            CatalogGroup.Controls.Add(SearchBtn);
+            CatalogGroup.Controls.Add(TextBoxSearch);
+            CatalogGroup.Controls.Add(CatalogTreeView);
+            CatalogGroup.Dock = DockStyle.Fill;
+            CatalogGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            CatalogGroup.Location = new Point(3, 3);
+            CatalogGroup.Name = "CatalogGroup";
+            CatalogGroup.Size = new Size(380, 406);
+            CatalogGroup.TabIndex = 1;
+            CatalogGroup.TabStop = false;
+            CatalogGroup.Text = "Catalog";
+            // 
+            // CatalogButtonsTableLayoutPanel
+            // 
+            CatalogButtonsTableLayoutPanel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            CatalogButtonsTableLayoutPanel.ColumnCount = 4;
+            CatalogButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            CatalogButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            CatalogButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            CatalogButtonsTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            CatalogButtonsTableLayoutPanel.Controls.Add(AddRootSectionBtn, 0, 0);
+            CatalogButtonsTableLayoutPanel.Controls.Add(AddSectionBtn, 1, 0);
+            CatalogButtonsTableLayoutPanel.Controls.Add(AddElementBtn, 2, 0);
+            CatalogButtonsTableLayoutPanel.Controls.Add(RemoveBtn, 3, 0);
+            CatalogButtonsTableLayoutPanel.Location = new Point(6, 361);
+            CatalogButtonsTableLayoutPanel.Name = "CatalogButtonsTableLayoutPanel";
+            CatalogButtonsTableLayoutPanel.RowCount = 1;
+            CatalogButtonsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            CatalogButtonsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            CatalogButtonsTableLayoutPanel.Size = new Size(367, 42);
+            CatalogButtonsTableLayoutPanel.TabIndex = 10;
+            // 
+            // AddRootSectionBtn
+            // 
+            AddRootSectionBtn.Dock = DockStyle.Fill;
+            AddRootSectionBtn.IconChar = FontAwesome.Sharp.IconChar.FolderTree;
+            AddRootSectionBtn.IconColor = Color.Black;
+            AddRootSectionBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            AddRootSectionBtn.IconSize = 30;
+            AddRootSectionBtn.Location = new Point(3, 3);
+            AddRootSectionBtn.Name = "AddRootSectionBtn";
+            AddRootSectionBtn.Size = new Size(85, 36);
+            AddRootSectionBtn.TabIndex = 8;
+            AddRootTip.SetToolTip(AddRootSectionBtn, "Add new root section");
+            AddRootSectionBtn.UseVisualStyleBackColor = true;
+            AddRootSectionBtn.Click += AddRootSectionBtn_Click;
+            // 
+            // AddSectionBtn
+            // 
+            AddSectionBtn.Dock = DockStyle.Fill;
+            AddSectionBtn.IconChar = FontAwesome.Sharp.IconChar.FolderPlus;
+            AddSectionBtn.IconColor = Color.Black;
+            AddSectionBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            AddSectionBtn.IconSize = 30;
+            AddSectionBtn.Location = new Point(94, 3);
+            AddSectionBtn.Name = "AddSectionBtn";
+            AddSectionBtn.Size = new Size(85, 36);
+            AddSectionBtn.TabIndex = 5;
+            AddSectionTip.SetToolTip(AddSectionBtn, "Add new section to current section");
+            AddSectionBtn.UseVisualStyleBackColor = true;
+            AddSectionBtn.Click += AddSection_Click;
+            // 
+            // AddElementBtn
+            // 
+            AddElementBtn.Dock = DockStyle.Fill;
+            AddElementBtn.IconChar = FontAwesome.Sharp.IconChar.FileCirclePlus;
+            AddElementBtn.IconColor = Color.Black;
+            AddElementBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            AddElementBtn.IconSize = 30;
+            AddElementBtn.Location = new Point(185, 3);
+            AddElementBtn.Name = "AddElementBtn";
+            AddElementBtn.Size = new Size(85, 36);
+            AddElementBtn.TabIndex = 6;
+            AddElementTip.SetToolTip(AddElementBtn, "Add new element");
+            AddElementBtn.UseVisualStyleBackColor = true;
+            AddElementBtn.Click += AddElementBtn_Click;
+            // 
+            // RemoveBtn
+            // 
+            RemoveBtn.Dock = DockStyle.Fill;
+            RemoveBtn.IconChar = FontAwesome.Sharp.IconChar.Trash;
+            RemoveBtn.IconColor = Color.Black;
+            RemoveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            RemoveBtn.IconSize = 30;
+            RemoveBtn.Location = new Point(276, 3);
+            RemoveBtn.Name = "RemoveBtn";
+            RemoveBtn.Size = new Size(88, 36);
+            RemoveBtn.TabIndex = 7;
+            RemoveTip.SetToolTip(RemoveBtn, "Remove element or section");
+            RemoveBtn.UseVisualStyleBackColor = true;
+            RemoveBtn.Click += Remove_Click;
             // 
             // SearchBtn
             // 
+            SearchBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             SearchBtn.IconChar = FontAwesome.Sharp.IconChar.MagnifyingGlass;
             SearchBtn.IconColor = Color.Black;
             SearchBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
             SearchBtn.IconSize = 25;
-            SearchBtn.Location = new Point(316, 26);
+            SearchBtn.Location = new Point(321, 26);
             SearchBtn.Name = "SearchBtn";
             SearchBtn.Size = new Size(48, 30);
             SearchBtn.TabIndex = 9;
             SearchBtn.UseVisualStyleBackColor = true;
             SearchBtn.Click += SearchBtn_Click;
             // 
-            // AddRootSectionBtn
+            // TextBoxSearch
             // 
-            AddRootSectionBtn.IconChar = FontAwesome.Sharp.IconChar.FolderTree;
-            AddRootSectionBtn.IconColor = Color.Black;
-            AddRootSectionBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            AddRootSectionBtn.IconSize = 30;
-            AddRootSectionBtn.Location = new Point(6, 364);
-            AddRootSectionBtn.Name = "AddRootSectionBtn";
-            AddRootSectionBtn.Size = new Size(85, 33);
-            AddRootSectionBtn.TabIndex = 8;
-            AddRootTip.SetToolTip(AddRootSectionBtn, "Add new root section");
-            AddRootSectionBtn.UseVisualStyleBackColor = true;
-            AddRootSectionBtn.Click += AddRootSectionBtn_Click;
+            TextBoxSearch.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            TextBoxSearch.Location = new Point(9, 27);
+            TextBoxSearch.Name = "TextBoxSearch";
+            TextBoxSearch.Size = new Size(304, 28);
+            TextBoxSearch.TabIndex = 1;
+            TextBoxSearch.KeyPress += searchTextBox_KeyPress;
             // 
-            // RemoveBtn
+            // AttributesGroup
             // 
-            RemoveBtn.IconChar = FontAwesome.Sharp.IconChar.Trash;
-            RemoveBtn.IconColor = Color.Black;
-            RemoveBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            RemoveBtn.IconSize = 30;
-            RemoveBtn.Location = new Point(279, 364);
-            RemoveBtn.Name = "RemoveBtn";
-            RemoveBtn.Size = new Size(85, 33);
-            RemoveBtn.TabIndex = 7;
-            RemoveTip.SetToolTip(RemoveBtn, "Remove element or section");
-            RemoveBtn.UseVisualStyleBackColor = true;
-            RemoveBtn.Click += Remove_Click;
+            AttributesGroup.Controls.Add(AttributesDataGridView);
+            AttributesGroup.Dock = DockStyle.Fill;
+            AttributesGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            AttributesGroup.Location = new Point(3, 415);
+            AttributesGroup.Name = "AttributesGroup";
+            AttributesGroup.Size = new Size(380, 217);
+            AttributesGroup.TabIndex = 2;
+            AttributesGroup.TabStop = false;
+            AttributesGroup.Text = "Attributes";
             // 
-            // AddElementBtn
+            // AttributesDataGridView
             // 
-            AddElementBtn.IconChar = FontAwesome.Sharp.IconChar.FileCirclePlus;
-            AddElementBtn.IconColor = Color.Black;
-            AddElementBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            AddElementBtn.IconSize = 30;
-            AddElementBtn.Location = new Point(188, 364);
-            AddElementBtn.Name = "AddElementBtn";
-            AddElementBtn.Size = new Size(85, 33);
-            AddElementBtn.TabIndex = 6;
-            AddElementTip.SetToolTip(AddElementBtn, "Add new element");
-            AddElementBtn.UseVisualStyleBackColor = true;
-            AddElementBtn.Click += AddElementBtn_Click;
+            AttributesDataGridView.AllowUserToAddRows = false;
+            AttributesDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            AttributesDataGridView.ColumnHeadersVisible = false;
+            AttributesDataGridView.Dock = DockStyle.Fill;
+            AttributesDataGridView.Location = new Point(3, 24);
+            AttributesDataGridView.Name = "AttributesDataGridView";
+            AttributesDataGridView.RowHeadersVisible = false;
+            AttributesDataGridView.RowHeadersWidth = 51;
+            AttributesDataGridView.RowTemplate.Height = 29;
+            AttributesDataGridView.Size = new Size(374, 190);
+            AttributesDataGridView.TabIndex = 0;
+            AttributesDataGridView.CellEndEdit += dataGridView_CellEndEdit;
             // 
-            // AddSectionBtn
+            // PdfViewerControl
             // 
-            AddSectionBtn.IconChar = FontAwesome.Sharp.IconChar.FolderPlus;
-            AddSectionBtn.IconColor = Color.Black;
-            AddSectionBtn.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            AddSectionBtn.IconSize = 30;
-            AddSectionBtn.Location = new Point(97, 364);
-            AddSectionBtn.Name = "AddSectionBtn";
-            AddSectionBtn.Size = new Size(85, 33);
-            AddSectionBtn.TabIndex = 5;
-            AddSectionTip.SetToolTip(AddSectionBtn, "Add new section to current section");
-            AddSectionBtn.UseVisualStyleBackColor = true;
-            AddSectionBtn.Click += AddSection_Click;
+            PdfViewerControl.Dock = DockStyle.Fill;
+            PdfViewerControl.FindTextHighLightColor = Color.FromArgb(200, 153, 193, 218);
+            PdfViewerControl.FormFillEnabled = false;
+            PdfViewerControl.IgnoreCase = false;
+            PdfViewerControl.IsToolBarVisible = true;
+            PdfViewerControl.Location = new Point(389, 3);
+            PdfViewerControl.Name = "PdfViewerControl";
+            PdfViewerControl.OnRenderPageExceptionEvent = null;
+            MainTableLayoutPanel.SetRowSpan(PdfViewerControl, 2);
+            PdfViewerControl.Size = new Size(896, 629);
+            PdfViewerControl.TabIndex = 3;
+            PdfViewerControl.Text = "pdfViewer1";
+            PdfViewerControl.ViewerBackgroundColor = Color.FromArgb(229, 229, 229);
             // 
-            // searchTextBox
+            // MainTableLayoutPanel
             // 
-            searchTextBox.Location = new Point(6, 27);
-            searchTextBox.Name = "searchTextBox";
-            searchTextBox.Size = new Size(304, 28);
-            searchTextBox.TabIndex = 1;
-            // 
-            // attributesGroup
-            // 
-            attributesGroup.Controls.Add(dataGridView);
-            attributesGroup.Font = new Font("Montserrat", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
-            attributesGroup.Location = new Point(4, 411);
-            attributesGroup.Name = "attributesGroup";
-            attributesGroup.Size = new Size(373, 220);
-            attributesGroup.TabIndex = 2;
-            attributesGroup.TabStop = false;
-            attributesGroup.Text = "Attributes";
-            // 
-            // dataGridView
-            // 
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.ColumnHeadersVisible = false;
-            dataGridView.Location = new Point(6, 27);
-            dataGridView.Name = "dataGridView";
-            dataGridView.RowHeadersVisible = false;
-            dataGridView.RowHeadersWidth = 51;
-            dataGridView.RowTemplate.Height = 29;
-            dataGridView.Size = new Size(360, 187);
-            dataGridView.TabIndex = 0;
-            dataGridView.CellEndEdit += dataGridView_CellEndEdit;
-            // 
-            // pdfViewer
-            // 
-            pdfViewer.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pdfViewer.FindTextHighLightColor = Color.FromArgb(200, 153, 193, 218);
-            pdfViewer.FormFillEnabled = false;
-            pdfViewer.IgnoreCase = false;
-            pdfViewer.IsToolBarVisible = true;
-            pdfViewer.Location = new Point(383, 2);
-            pdfViewer.MultiPagesThreshold = 60;
-            pdfViewer.Name = "pdfViewer";
-            pdfViewer.OnRenderPageExceptionEvent = null;
-            pdfViewer.Size = new Size(899, 629);
-            pdfViewer.TabIndex = 3;
-            pdfViewer.Text = "pdfViewer1";
-            pdfViewer.Threshold = 60;
-            pdfViewer.ViewerBackgroundColor = Color.FromArgb(229, 229, 229);
+            MainTableLayoutPanel.ColumnCount = 2;
+            MainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            MainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            MainTableLayoutPanel.Controls.Add(CatalogGroup, 0, 0);
+            MainTableLayoutPanel.Controls.Add(AttributesGroup, 0, 1);
+            MainTableLayoutPanel.Controls.Add(PdfViewerControl, 1, 0);
+            MainTableLayoutPanel.Dock = DockStyle.Fill;
+            MainTableLayoutPanel.Location = new Point(0, 0);
+            MainTableLayoutPanel.Name = "MainTableLayoutPanel";
+            MainTableLayoutPanel.RowCount = 2;
+            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 65F));
+            MainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
+            MainTableLayoutPanel.Size = new Size(1288, 635);
+            MainTableLayoutPanel.TabIndex = 4;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1285, 635);
-            Controls.Add(pdfViewer);
-            Controls.Add(attributesGroup);
-            Controls.Add(catalogGroup);
+            ClientSize = new Size(1288, 635);
+            Controls.Add(MainTableLayoutPanel);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(700, 400);
             Name = "MainForm";
-            Text = "EBooks Catalog";
+            Text = "Catalog";
             FormClosing += MainForm_FormClosing;
-            catalogGroup.ResumeLayout(false);
-            catalogGroup.PerformLayout();
-            attributesGroup.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            CatalogGroup.ResumeLayout(false);
+            CatalogGroup.PerformLayout();
+            CatalogButtonsTableLayoutPanel.ResumeLayout(false);
+            AttributesGroup.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)AttributesDataGridView).EndInit();
+            MainTableLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private TreeView treeView;
-        private GroupBox catalogGroup;
-        private GroupBox attributesGroup;
-        private DataGridView dataGridView;
-        private Spire.PdfViewer.Forms.PdfViewer pdfViewer;
-        private TextBox searchTextBox;
+        private TreeView CatalogTreeView;
+        private GroupBox CatalogGroup;
+        private GroupBox AttributesGroup;
+        private DataGridView AttributesDataGridView;
+        private TextBox TextBoxSearch;
         private FontAwesome.Sharp.IconButton AddRootSectionBtn;
         private FontAwesome.Sharp.IconButton AddSectionBtn;
         private FontAwesome.Sharp.IconButton AddElementBtn;
@@ -236,5 +286,8 @@
         private ToolTip AddElementTip;
         private ToolTip RemoveTip;
         private FontAwesome.Sharp.IconButton SearchBtn;
+        private Spire.PdfViewer.Forms.PdfViewer PdfViewerControl;
+        private TableLayoutPanel MainTableLayoutPanel;
+        private TableLayoutPanel CatalogButtonsTableLayoutPanel;
     }
 }
