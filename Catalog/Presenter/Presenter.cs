@@ -47,7 +47,7 @@ namespace BookCatalog
                     NullValueHandling = NullValueHandling.Ignore,
                 }) ?? new BookCatalog();
 
-                catalog.Root.ChildSections.ForEach(r => form.CatalogTree.Nodes.Add(new SectionNode(r)));
+                catalog.AddNodesToTreeView(form.CatalogTree);
             }
             else
             {
@@ -66,7 +66,7 @@ namespace BookCatalog
         {
             TreeNode? sourceNode = _nodeToMove;
 
-            if (sourceNode is not null /* && tree is not null*/)
+            if (sourceNode is not null)
             {
                 Point pt = form.CatalogTree.PointToClient(new Point(e.X, e.Y));
                 TreeNode destinationNode = form.CatalogTree.GetNodeAt(pt);
@@ -96,12 +96,12 @@ namespace BookCatalog
 
                     if (sourceNode is SectionNode s)
                     {
-                        catalog.Root.RemoveSection(s.Section);
+                        catalog.RemoveSection(s.Section);
                         sectionDestinationNode.Section.AddSection(s.Section);
                     }
                     else if (sourceNode is ElementNode el)
                     {
-                        catalog.Root.RemoveElement(el.Element);
+                        catalog.RemoveElement(el.Element);
                         sectionDestinationNode.Section.AddElement(el.Element);
                     }
 
@@ -110,7 +110,7 @@ namespace BookCatalog
 
                 if (sourceNode is SectionNode sectionNode && destinationNode is null)
                 {
-                    if (sourceNode is SectionNode sNode && catalog.Root.ChildSections.Exists(s => s.Name == sNode.Name))
+                    if (sourceNode is SectionNode sNode && catalog.SectionExists(sNode.Name))
                     {
                         MessageBox.Show("Section with such name already exists in the current section.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -119,8 +119,8 @@ namespace BookCatalog
                     form.CatalogTree.Nodes.Remove(sectionNode);
                     form.CatalogTree.Nodes.Add(sectionNode);
 
-                    catalog.Root.RemoveSection(sectionNode.Section);
-                    catalog.Root.AddSection(sectionNode.Section);
+                    catalog.RemoveSection(sectionNode.Section);
+                    catalog.AddSection(sectionNode.Section);
 
                     form.CatalogTree.SelectedNode = sectionNode;
                 }
@@ -316,12 +316,12 @@ namespace BookCatalog
                 i++;
                 name = $"Section {i}";
             }
-            while (catalog.Root.ChildSections.Exists(s => s.Name == name));
+            while (catalog.SectionExists(name));
 
             EBookSection newSection = new(name);
             SectionNode newNode = new(newSection);
 
-            catalog.Root.AddSection(newSection);
+            catalog.AddSection(newSection);
             form.CatalogTree.Nodes.Add(newNode);
 
             SelectNode(newNode);
@@ -356,14 +356,14 @@ namespace BookCatalog
             if (_selectedNode is SectionNode sectionNode)
             {
                 form.CatalogTree.Nodes.Remove(sectionNode);
-                catalog.Root.RemoveSection(sectionNode.Section);
+                catalog.RemoveSection(sectionNode.Section);
                 form.AttributesDataGrid.Columns.Clear();
             }
 
             if (_selectedNode is ElementNode elementNode)
             {
                 form.CatalogTree.Nodes.Remove(elementNode);
-                catalog.Root.RemoveElement(elementNode.Element);
+                catalog.RemoveElement(elementNode.Element);
                 form.AttributesDataGrid.Columns.Clear();
             }
 
@@ -379,7 +379,7 @@ namespace BookCatalog
                     if ((sectionNode.Section.ParentSection is not null
                         && !sectionNode.Section.ParentSection.ChildSections.Exists(s => s.Name == e.Label))
                         || (sectionNode.Section.ParentSection is null
-                        && !catalog.Root.ChildSections.Exists(s => s.Name == e.Label)))
+                        && !catalog.SectionExists(e.Label)))
                     {
                         sectionNode.Section.Name = e.Label;
                     }

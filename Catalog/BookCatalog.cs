@@ -1,4 +1,8 @@
-﻿namespace BookCatalog
+﻿using BookCatalog.TreeViewHelper;
+using Newtonsoft.Json.Bson;
+using System.Drawing.Text;
+
+namespace BookCatalog
 {
     public class BookCatalog : Catalog
     {
@@ -18,5 +22,10 @@
         }
 
         #endregion
+
+        public void AddNodesToTreeView(TreeView treeView)
+        {
+            Root.ChildSections.ForEach(r => treeView.Nodes.Add(new SectionNode(r)));
+        }
     }
 }
