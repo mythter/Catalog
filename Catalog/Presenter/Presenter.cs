@@ -56,12 +56,14 @@ namespace BookCatalog
             }
         }
 
+        // Make drag effect when user try to drag element in a TreeView.
         public void TreeViewDragEnter(object? sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
             SelectNode(_nodeToMove);
         }
 
+        // Relocate an element of a TreeView when user dragged and dropped it.
         private void TreeViewDragDrop(object? sender, DragEventArgs e)
         {
             TreeNode? sourceNode = _nodeToMove;
@@ -83,9 +85,9 @@ namespace BookCatalog
                 if (destinationNode is SectionNode sectionDestinationNode)
                 {
                     if ((sourceNode is SectionNode sNode
-                        && sectionDestinationNode.Section.ChildSections.Exists(s => s.Name == sNode.Section.Name))
+                        && sectionDestinationNode.Section.SectionExists(sNode.Section.Name))
                         || (sourceNode is ElementNode eNode
-                        && sectionDestinationNode.Section.Elements.Exists(s => s.Name == eNode.Element.Name)))
+                        && sectionDestinationNode.Section.ElementExists(eNode.Element.Name)))
                     {
                         MessageBox.Show("Section or element with such name already exists in the current section.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -127,11 +129,13 @@ namespace BookCatalog
             }
         }
 
+        // track the node the cursor is hover (it needs to drag and drop event).
         private void TreeNodeMouseHover(object? sender, TreeNodeMouseHoverEventArgs e)
         {
             _nodeToMove = e.Node;
         }
-
+        
+        // Method that shows attributes in a DataGridView element when user clicked on the node of TreeView element.
         private void ShowAttributes(object? sender, TreeNodeMouseClickEventArgs e)
         {
             _selectedNode = e.Node;
@@ -139,6 +143,7 @@ namespace BookCatalog
             ShowAttributes(_selectedNode);
         }
 
+        // Method that shows attributes in a DataGridView element.
         private void ShowAttributes(TreeNode node)
         {
             if (node is SectionNode sectionNode)
@@ -179,6 +184,7 @@ namespace BookCatalog
             }
         }
 
+        // Open file when user double clicked on the node.
         private void OpenFile(object? sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Node is ElementNode elementNode
@@ -217,6 +223,7 @@ namespace BookCatalog
             }
         }
 
+        // Serialize the catalog object to save its data.
         private void Close(object? sender, FormClosingEventArgs e)
         {
             JsonSerializer serializer = new();
@@ -235,6 +242,7 @@ namespace BookCatalog
             }
         }
 
+        // Method that changes attribute of a TreeView element when user wrote it in DataGridView.
         private void ChangeAttributeValue(object? sender, DataGridViewCellEventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
@@ -282,6 +290,7 @@ namespace BookCatalog
             }
         }
 
+        // Add subsection to catalog and TreeView.
         private void AddSection(object? sender, EventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
@@ -294,7 +303,7 @@ namespace BookCatalog
                     i++;
                     name = $"Section {i}";
                 }
-                while (sectionNode.Section.ChildSections.Exists(s => s.Name == name));
+                while (sectionNode.Section.SectionExists(name));
 
                 EBookSection newSection = new(name);
                 SectionNode newNode = new(newSection);
@@ -306,6 +315,7 @@ namespace BookCatalog
             }
         }
 
+        // Add root section to catalog and TreeView.
         private void AddRootSection(object? sender, EventArgs e)
         {
             int i = -1;
@@ -327,6 +337,7 @@ namespace BookCatalog
             SelectNode(newNode);
         }
 
+        // Add element to catalog and TreeView
         private void AddElement(object? sender, EventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
@@ -339,7 +350,7 @@ namespace BookCatalog
                     i++;
                     name = $"Element {i}";
                 }
-                while (sectionNode.Section.Elements.Exists(s => s.Name == name));
+                while (sectionNode.Section.ElementExists(name));
 
                 EBook newElement = new(name);
                 ElementNode newNode = new(newElement);
@@ -351,6 +362,7 @@ namespace BookCatalog
             }
         }
 
+        // Remove section or element in catalog and TreeView.
         private void Remove(object? sender, EventArgs e)
         {
             if (_selectedNode is SectionNode sectionNode)
@@ -370,6 +382,7 @@ namespace BookCatalog
             _selectedNode = null;
         }
 
+        // Method that Changes name of tree node and catalog element or section name.
         private void TreeNodeNameEdited(object? sender, NodeLabelEditEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.Label))
@@ -377,7 +390,7 @@ namespace BookCatalog
                 if (_selectedNode is SectionNode sectionNode)
                 {
                     if ((sectionNode.Section.ParentSection is not null
-                        && !sectionNode.Section.ParentSection.ChildSections.Exists(s => s.Name == e.Label))
+                        && !sectionNode.Section.ParentSection.SectionExists(e.Label))
                         || (sectionNode.Section.ParentSection is null
                         && !catalog.SectionExists(e.Label)))
                     {
@@ -392,7 +405,7 @@ namespace BookCatalog
 
                 if (_selectedNode is ElementNode elementNode)
                 {
-                    if (!elementNode.Element.ParentSection!.Elements.Exists(el => el.Name == e.Label))
+                    if (!elementNode.Element.ParentSection!.ElementExists(e.Label))
                     {
                         elementNode.Element.Name = e.Label;
                     }
@@ -405,6 +418,7 @@ namespace BookCatalog
             }
         }
 
+        // Search element in the TreeView when user pressed Enter key.
         private void SearchTextBoxKeyPress(object? sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -413,11 +427,13 @@ namespace BookCatalog
             }
         }
 
+        // Search element in the TreeView when user pressed Search button.
         private void Search(object? sender, EventArgs e)
         {
             SearchElement();
         }
-
+        
+        // Search element in the TreeView
         private void SearchElement()
         {
             string search = form.SearchTextBox.ToLower();
@@ -439,6 +455,7 @@ namespace BookCatalog
             }
         }
 
+        // Method that searches the node in the TreeView elememnt and returns true if it exists, otherwise false.
         private ElementNode? FindNode(string search, TreeNode treeNode)
         {
             foreach (var node in treeNode.Nodes)
@@ -466,6 +483,7 @@ namespace BookCatalog
             return null;
         }
 
+        // Select node in a TreeView element
         private void SelectNode(TreeNode? node)
         {
             if (node is not null)

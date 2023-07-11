@@ -32,6 +32,8 @@ namespace BookCatalog
 
         #endregion
 
+        #region Methods
+
         /// <summary>
         /// Method to add subsection to root section.
         /// </summary>
@@ -66,13 +68,15 @@ namespace BookCatalog
         }
 
         /// <summary>
-        /// Method to check if section with specific name exists in catalog
+        /// Method to check if section with specific name exists in catalog root sections
         /// </summary>
         /// <param name="sectionName"> Section name to search </param>
         /// <returns> <see langword="true"/> if section exists in catalog; otherwise <see langword="false"/> </returns>
         public bool SectionExists(string sectionName)
         {
             return Root.ChildSections.Exists(s => s.Name == sectionName);
-        }
+        } 
+
+        #endregion
     }
 }

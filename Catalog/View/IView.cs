@@ -25,11 +25,5 @@
         event EventHandler AddElement;
         event EventHandler Remove;
         event EventHandler Search;
-
-        // Main form properties
-        int FormWidth { get; }
-        int FormHeight { get; }
-        int FormX { get; }
-        int FormY { get; }
     }
 }

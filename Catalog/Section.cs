@@ -207,6 +207,26 @@
             return false;
         }
 
+        /// <summary>
+        /// Method to check if subsection with specific name exists in current section
+        /// </summary>
+        /// <param name="sectionName"> Section name to search </param>
+        /// <returns> <see langword="true"/> if subsection exists in current section; otherwise <see langword="false"/> </returns>
+        public bool SectionExists(string sectionName)
+        {
+            return ChildSections.Exists(s => s.Name == sectionName);
+        }
+
+        /// <summary>
+        /// Method to check if element with specific name exists in current section
+        /// </summary>
+        /// <param name="elementName"> Element name to search </param>
+        /// <returns> <see langword="true"/> if element exists in current section; otherwise <see langword="false"/> </returns>
+        public bool ElementExists(string elementName)
+        {
+            return Elements.Exists(e => e.Name == elementName);
+        }
+
         #endregion
     }
 }

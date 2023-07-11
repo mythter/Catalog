@@ -13,7 +13,7 @@ namespace BookCatalog
         Font? MontserratFontRegular;
         #endregion
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S4487:Unread \"private\" fields should be removed", Justification = "Presenter module needs to do all main logic")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S4487:Unread \"private\" fields should be removed", Justification = "Presenter needs to implement MVP pattern")]
         private Presenter? presenter;
 
         public MainForm()
@@ -47,10 +47,6 @@ namespace BookCatalog
         public TreeView CatalogTree { get => CatalogTreeView; set => CatalogTreeView = value; }
         public DataGridView AttributesDataGrid { get => AttributesDataGridView; set => AttributesDataGridView = value; }
         public Spire.PdfViewer.Forms.PdfViewer PdfViewer { get => PdfViewerControl; set => PdfViewerControl = value; }
-        public int FormWidth => this.Width;
-        public int FormHeight => this.Height;
-        public int FormX => this.Location.X;
-        public int FormY => this.Location.Y;
 
 #pragma warning restore S2292 // Trivial properties should be auto-implemented
 
@@ -63,12 +59,14 @@ namespace BookCatalog
         public event TreeNodeMouseClickEventHandler? OpenFile;
         public event FormClosingEventHandler? CloseEvent;
         public event DataGridViewCellEventHandler? ChangeAttributeValue;
+        public event KeyPressEventHandler? SearchTextBoxKeyPressEvent;
+
+        // Implementing IView interface events for buttons
         public event EventHandler? AddRootSection;
         public event EventHandler? AddSection;
         public event EventHandler? AddElement;
         public event EventHandler? Remove;
         public event EventHandler? Search;
-        public event KeyPressEventHandler? SearchTextBoxKeyPressEvent;
 
         private void TreeView_ItemDrag(object sender, ItemDragEventArgs e)
         {
