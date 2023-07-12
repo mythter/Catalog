@@ -1,13 +1,17 @@
-﻿namespace BookCatalog
+﻿using Newtonsoft.Json;
+using System.Xml.Linq;
+
+namespace BookCatalog
 {
     public class Catalog
     {
         #region Properties
 
         /// <summary>
-        /// List of all catalog items.
+        /// Property that contains all catalog items.
         /// </summary>
-        public List<Section> RootItems { get; set; }
+        [JsonProperty]
+        protected Section Root { get; set; }
 
         #endregion
 
@@ -15,12 +19,15 @@
 
         public Catalog()
         {
-            RootItems = new List<Section>();
+            Root = new Section("root");
         }
 
         public Catalog(Section section)
         {
-            RootItems = new List<Section>() { section };
+            Root = new Section("root")
+            {
+                ChildSections = new List<Section> { section }
+            };
         }
 
         #endregion
@@ -28,120 +35,47 @@
         #region Methods
 
         /// <summary>
-        /// Method to add section to catalog.
+        /// Method to add subsection to root section.
         /// </summary>
         /// <param name="section"> Section to add. </param>
-        /// <exception cref="ArgumentNullException"> Throws when <paramref name="section"/> is null. </exception>
-        public void Add(Section section)
+        /// <exception cref="ArgumentNullException"> Thrown when <paramref name="section"/> is null. </exception>
+        /// <exception cref="ArgumentException"> Thrown when <paramref name="section"/> with the same name has already been added to <see cref="ChildSections"/> list </exception>
+        public void AddSection(Section section)
         {
-            if (section is null)
-            {
-                throw new ArgumentNullException(nameof(section));
-            }
-
-            if (RootItems.Exists(s => s.Name == section.Name))
-            {
-                throw new ArgumentException("Subsection with such name has already exist in the current section.", nameof(section));
-            }
-
-            RootItems.Add(section);
+            Root.AddSection(section);
         }
 
         /// <summary>
-        /// Method to remove section from catalog.
+        /// Method to remove subsection from root section.
         /// </summary>
         /// <param name="section"> Section to remove. </param>
         /// <exception cref="ArgumentNullException"> Thrown when <paramref name="section"/> is null. </exception>
-        public bool Remove(Section section)
+        /// <returns> <see langword="true"/> if section successfully removed from catalog; otherwise <see langword="false"/> </returns>
+        public bool RemoveSection(Section section)
         {
-            if (section is null)
-            {
-                throw new ArgumentNullException(nameof(section));
-            }
-
-            if (RootItems.Remove(section))
-            {
-                return true;
-            }
-
-            foreach (var s in RootItems)
-            {
-                if (s.ChildSections.Remove(section))
-                {
-                    return true;
-                }
-                s.RemoveSection(section);
-            }
-
-            return false;
+            return Root.RemoveSection(section);
         }
 
         /// <summary>
-        /// Method to remove section by name from catalog.
+        /// Method to remove element from subsections of root section.
         /// </summary>
-        /// <param name="sectionName"> Name of the section to remove. </param>
-        /// <exception cref="ArgumentNullException"> Thrown when <paramref name="sectionName"/> is null. </exception>
-        public void Remove(string sectionName)
+        /// <param name="element"> Element to remove. </param>
+        /// <exception cref="ArgumentNullException"> Thrown when <paramref name="element"/> is null. </exception>
+        /// <returns> <see langword="true"/> if element successfully removed from catalog; otherwise <see langword="false"/> </returns>
+        public bool RemoveElement(Element element)
         {
-            if (sectionName is null)
-            {
-                throw new ArgumentNullException(nameof(sectionName));
-            }
-
-            var sectionToRemove = RootItems.Find(x => x.Name == sectionName);
-
-            if (sectionToRemove is not null)
-            {
-                RootItems.Remove(sectionToRemove);
-            }
+            return Root.RemoveElement(element);
         }
 
-        public bool RemoveElementFromRootItems(Element element)
+        /// <summary>
+        /// Method to check if section with specific name exists in catalog root sections
+        /// </summary>
+        /// <param name="sectionName"> Section name to search </param>
+        /// <returns> <see langword="true"/> if section exists in catalog; otherwise <see langword="false"/> </returns>
+        public bool SectionExists(string sectionName)
         {
-            if (element is null)
-            {
-                throw new ArgumentNullException(nameof(element));
-            }
-
-            foreach (var s in RootItems)
-            {
-                if (s.RemoveElement(element))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public void PrintCatalogTree()
-        {
-            foreach (var section in RootItems)
-            {
-                Console.WriteLine(section.Name);
-                PrintSection(section, 1);
-            }
-        }
-
-        private void PrintSection(Section section, int depth)
-        {
-            if (section.ChildSections is not null)
-            {
-                foreach (var s in section.ChildSections)
-                {
-                    Console.WriteLine(new string(' ', depth * 2) + '-' + s.Name);
-                    PrintSection(s, depth + 1);
-                }
-            }
-
-            if (section.Elements is not null)
-            {
-                foreach (var element in section.Elements)
-                {
-                    Console.WriteLine(new string(' ', depth * 2) + '-' + element.Name);
-                }
-            }
-        }
+            return Root.ChildSections.Exists(s => s.Name == sectionName);
+        } 
 
         #endregion
     }

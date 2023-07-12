@@ -1,10 +1,6 @@
-﻿using BookCatalog.TreeViewHelper;
-using System.Text.Json.Serialization;
-using System.Xml.Linq;
-
-namespace BookCatalog
+﻿namespace BookCatalog
 {
-    public abstract class Section
+    public class Section
     {
         #region Properties
 
@@ -17,7 +13,7 @@ namespace BookCatalog
 
         #region Constructors
 
-        protected Section(string name)
+        public Section(string name)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -69,10 +65,9 @@ namespace BookCatalog
                 throw new ArgumentNullException(nameof(section));
             }
 
-            //return ChildSections.Remove(section);
-
             if (ChildSections.Remove(section))
             {
+                section.ParentSection = null;
                 return true;
             }
 
@@ -80,6 +75,7 @@ namespace BookCatalog
             {
                 if (s.ChildSections.Remove(section))
                 {
+                    section.ParentSection = null;
                     return true;
                 }
                 s.RemoveSection(section);
@@ -127,7 +123,6 @@ namespace BookCatalog
             }
 
             Elements.Add(element);
-
             element.ParentSection = this;
         }
 
@@ -145,6 +140,7 @@ namespace BookCatalog
 
             if (Elements.Remove(element))
             {
+                element.ParentSection = null;
                 return true;
             }
 
@@ -152,6 +148,7 @@ namespace BookCatalog
             {
                 if (s.Elements.Remove(element))
                 {
+                    element.ParentSection = null;
                     return true;
                 }
                 s.RemoveElement(element);
@@ -178,6 +175,56 @@ namespace BookCatalog
             {
                 ChildSections.Remove(elementToRemove);
             }
+        }
+
+        /// <summary>
+        /// Method that recursively searches for subsection in current section.
+        /// </summary>
+        /// <param name="section"> section to search </param>
+        /// <returns> <see langword="true"/> if section contains given child; otherwise <see langword="false"/> </returns>
+        /// <exception cref="ArgumentNullException"> Thrown when <paramref name="section"/> is null. </exception>
+        public bool ContainsChild(Section section)
+        {
+            if (section is null)
+            {
+                throw new ArgumentNullException(nameof(section));
+            }
+
+            if (ChildSections.Contains(section))
+            {
+                return true;
+            }
+
+            foreach (var s in ChildSections)
+            {
+                if (s.ChildSections.Contains(section))
+                {
+                    return true;
+                }
+                s.ContainsChild(section);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Method to check if subsection with specific name exists in current section
+        /// </summary>
+        /// <param name="sectionName"> Section name to search </param>
+        /// <returns> <see langword="true"/> if subsection exists in current section; otherwise <see langword="false"/> </returns>
+        public bool SectionExists(string sectionName)
+        {
+            return ChildSections.Exists(s => s.Name == sectionName);
+        }
+
+        /// <summary>
+        /// Method to check if element with specific name exists in current section
+        /// </summary>
+        /// <param name="elementName"> Element name to search </param>
+        /// <returns> <see langword="true"/> if element exists in current section; otherwise <see langword="false"/> </returns>
+        public bool ElementExists(string elementName)
+        {
+            return Elements.Exists(e => e.Name == elementName);
         }
 
         #endregion
